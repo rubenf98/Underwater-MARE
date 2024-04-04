@@ -1,0 +1,16 @@
+.homeContainer {
+  width: 100vw;
+  margin: auto;
+}
+
+.container {
+  width: 80%;
+  max-width: 1500px;
+  margin: auto;
+}
+
+@media (max-width: 1100px) {
+  .container {
+    width: 97%;
+  }
+}

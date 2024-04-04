@@ -1,0 +1,23 @@
+.container {
+  padding-top: 50px;
+  margin: auto;
+}
+
+.logos img {
+  width: 100%;
+}
+
+.description {
+  font-size: 0.8rem;
+  color: #777777;
+}
+
+.socialLogos a {
+  color: #777777;
+  font-size: 1.5rem;
+  padding-right: 5px;
+
+  &:hover {
+    color: black;
+  }
+}

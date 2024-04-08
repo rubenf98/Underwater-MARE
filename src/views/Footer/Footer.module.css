@@ -3,8 +3,12 @@
   margin: auto;
 }
 
-.logos img {
-  width: 100%;
+.logos {
+  padding: 10px;
+
+  img {
+    width: 100%;
+  }
 }
 
 .description {

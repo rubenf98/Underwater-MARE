@@ -2,7 +2,7 @@ import styles from "./Methods.module.css";
 
 function Methods() {
   return (
-    <div>Methods</div>
+    <div id="methods">Methods</div>
   )
 }
 

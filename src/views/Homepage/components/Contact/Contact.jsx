@@ -2,7 +2,7 @@ import styles from "./Contact.module.css";
 
 function Contact() {
   return (
-    <div>Contact</div>
+    <div id="contact">Contact</div>
   )
 }
 

@@ -1,0 +1,32 @@
+.mainContainer {
+  padding-top: 100px;
+  margin: auto;
+}
+
+.container {
+  width: 85%;
+  max-width: 900px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 0 50px 50px 50px;
+  margin: auto;
+}
+
+@media (max-width: 1100px) {
+  .container {
+    width: 95%;
+  }
+}
+
+.headerSection {
+  padding: 20px;
+}
+
+.headerSection p {
+  color: #777777;
+}
+
+.styledLink {
+  color: #000000;
+  font-size: 1rem;
+}

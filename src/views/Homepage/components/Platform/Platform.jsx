@@ -12,7 +12,7 @@ function Platform() {
       </Col>
       <Carousel />
       <Col xs={24} className={styles.splitterContainer}>
-        <img src="/assets/2.jpeg" />
+        <img src="/assets/1.png" />
       </Col>
     </Row>
   );

@@ -8,7 +8,7 @@ function Carousel() {
     <>
       {images.map((image, index) => (
         <Col xs={12} md={6} align="center" key={index}>
-          <img src={`/assets/${image}.jpg`} className={styles.carouselImages} />
+          <img src={`/assets/${image}.jpg`} className={styles.carouselImages} alt="Images of the different features of the dashboard"/>
         </Col>
       ))}
     </>

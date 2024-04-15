@@ -5,7 +5,7 @@ function Home() {
     <div className={styles.container} id="home">
       <img
         className={styles.backgroundImage}
-        src="/assets/1.jpg"
+        src="/assets/landing.webp"
         alt="Landing page image of a diver doing an underwater visual survey census"
       />
       <div className={styles.textContainer}>

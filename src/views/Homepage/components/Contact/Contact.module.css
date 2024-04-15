@@ -1,0 +1,55 @@
+.container {
+  padding-top: 20px;
+}
+
+.contactText {
+  padding: 20px;
+  h1 {
+    font-size: 3rem;
+    color: #044582;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+.formContainer {
+  width: 100%;
+  background-color: transparent;
+  padding: 20px;
+
+  input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+    border-radius: 0;
+    &::placeholder {
+      color: #7d7d7d;
+    }
+  }
+
+  textarea {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+    border-radius: 0;
+    resize: none;
+    &::placeholder {
+      color: #7d7d7d;
+    }
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  button {
+    font-size: 1rem;
+    height: auto;
+    background-color: transparent;
+    display: "flex";
+    justify-content: "flex-end";
+    border: 3px solid #044582;
+    border-radius: 0.75rem;
+  }
+}

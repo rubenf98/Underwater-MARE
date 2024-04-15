@@ -1,0 +1,30 @@
+.platform {
+  align-items: center;
+  padding-top: 20px;
+}
+
+.platformImage {
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    border-radius: 10%;
+  }
+}
+
+.carouselImages {
+  width: 100%;
+  height: auto;
+  max-width: 200px;
+}
+
+.splitterContainer {
+  width: 100%;
+  overflow: hidden;
+  max-height: 300px;
+  display: flex;
+  align-items: center;
+  img {
+    width: 100%;
+  }
+}

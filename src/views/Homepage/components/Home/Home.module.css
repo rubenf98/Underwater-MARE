@@ -1,15 +1,12 @@
 .container {
   width: 100vw;
-  overflow: hidden;
-  max-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.backgroundImage {
-  width: 100vw;
-  height: auto;
+  background-image: url("/assets/landing.webp");
+  background-size: cover;
+  background-position: center;
 }
 
 .textContainer {

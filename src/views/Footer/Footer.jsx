@@ -25,7 +25,7 @@ function Footer() {
       <Divider style={{ borderTop: "1px solid grey" }} />
       <Row gutter={[16, 16]} justify={"space-around"} align={"middle"}>
         {logoPaths.map((element, index) => (
-          <Col key={index} lg={2} md={2} sm={3} xs={4}>
+          <Col key={index} lg={2} md={3} sm={4} xs={6}>
             <div className={styles.logos}>
               <img
                 src={`/assets/logos/${element}.webp`}

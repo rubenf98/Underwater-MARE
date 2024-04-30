@@ -16,7 +16,7 @@ function Platform() {
       <Carousel />
       <Col xs={24} className={styles.splitterContainer}>
         <img
-          src="/assets/splitter.webp"
+          src="/assets/landing.webp"
           alt="Image of two divers doing an underwater visual census survey"
         />
       </Col>

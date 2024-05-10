@@ -1,70 +1,73 @@
 .headerContainer {
-  background: rgb(255, 254, 252) !important;
-  padding: 0 !important;
-  margin: 0;
-  transition: 0.5s ease;
-  border-bottom: 1px solid rgb(255, 254, 252);
+    background: rgb(255, 254, 252) !important;
+    padding: 0 !important;
+    margin: 0;
+    transition: 0.5s ease;
+    border-bottom: 1px solid rgb(255, 254, 252);
 }
 
 .navContainer {
-  width: 90%;
-  max-width: 1500px;
-  margin: auto;
+    width: 90%;
+    max-width: 1500px;
+    margin: auto;
 }
 
 .logo {
-  img {
-    height: 50px;
-    vertical-align: middle;
-    padding: 10px;
-  }
+    img {
+        height: 50px;
+        vertical-align: middle;
+        padding: 5px;
+        box-sizing: border-box;
+    }
 }
 
 .hidden {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .ant-affix {
-  z-index: 999;
+    z-index: 999;
 }
 
 .navbarLink {
-  color: black;
-  text-decoration: none;
-  font-size: 16px;
-  padding-left: 20px;
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+    padding-left: 20px;
 
-  &:hover {
-    color: #636b6f;
-  }
+    &:hover {
+        color: #636b6f;
+    }
 }
 
 .menuButton {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .drawerNavbar h3 {
-  font-weight: bold;
-  margin-top: 6px;
-  margin-bottom: 0px;
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bottom: 0px;
 }
 
 .spacer {
-  color: #636b6f;
-  font-size: 16px;
-  padding-left: 10px;
+    color: #636b6f;
+    font-size: 16px;
+    padding-left: 10px;
 }
 
 @media (max-width: 1000px) {
-  /* if smaller than 1000px */
-  .hidden {
-    display: none;
-  }
+
+    /* if smaller than 1000px */
+    .hidden {
+        display: none;
+    }
 }
 
 @media (min-width: 1000px) {
-  /* if bigger than 1000px */
-  .menuButton {
-    display: none;
-  }
+
+    /* if bigger than 1000px */
+    .menuButton {
+        display: none;
+    }
 }

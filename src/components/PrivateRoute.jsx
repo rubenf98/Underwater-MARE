@@ -3,28 +3,28 @@ import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const PrivateRoute = (props) => {
-  const { isAuthenticated } = props;
+    const { isAuthenticated } = props;
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const checkRoute = () => {
-    if (isAuthenticated == false) {
-      return navigate("/login");
-    }
-  };
+    const checkRoute = () => {
+        if (isAuthenticated == false) {
+            return navigate("/login");
+        }
+    };
 
-  useEffect(() => {
-    checkRoute();
-  }, [isAuthenticated]);
+    useEffect(() => {
+        checkRoute();
+    }, [isAuthenticated]);
 
-  return (
-    <React.Fragment>{isAuthenticated ? props.children : null}</React.Fragment>
-  );
+    return (
+        <React.Fragment>{isAuthenticated ? props.children : null}</React.Fragment>
+    );
 };
 const mapStateToProps = (state) => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-  };
+    return {
+        isAuthenticated: state.auth.isAuthenticated,
+    };
 };
 
 export default connect(mapStateToProps)(PrivateRoute);

@@ -1,26 +1,27 @@
 .container {
-  padding-top: 20px;
+    margin: 30px auto 50px auto;
 }
 
 .sectionContainer {
-  padding: 15px;
-  text-justify: inter-character;
-  text-align: justify;
-  p {
-    color: #6e6e6e;
-  }
+    padding: 15px;
+    text-justify: inter-character;
+    text-align: justify;
 
-  a {
-    color: #000000;
-    text-decoration: none;
-  }
+    p {
+        color: #6e6e6e;
+    }
+
+    a {
+        color: #000000;
+        text-decoration: none;
+    }
 }
 
 .divider {
-  border: 1px solid #044582;
-  height: 100%;
+    border: 1px solid #044582;
+    height: 100%;
 
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
 }

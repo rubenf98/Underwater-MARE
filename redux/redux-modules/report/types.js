@@ -1,0 +1,5 @@
+export const types = {
+    FETCH_REPORTS: "FETCH_REPORTS",
+    CREATE_PROJECT: "CREATE_PROJECT",
+    ADD_MEMBER: "ADD_MEMBER"
+};

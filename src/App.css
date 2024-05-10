@@ -1,40 +1,39 @@
 * {
-  font-family: "Sora", sans-serif;
+    font-family: "Sora", sans-serif;
 }
 
 body {
-  padding: 0;
-  margin: 0;
-  background-color: #fbfbfb;
-  overflow-x: hidden;
-  width: 100vw;
+    padding: 0;
+    margin: 0;
+    background-color: #fbfbfb;
+    overflow-x: hidden;
+    width: 100vw;
 }
 
 .app {
-  width: 100%;
-  height: auto;
-  display: flex;
-  margin: auto;
-  flex-direction: column;
-  overflow-x: hidden;
+    width: 100%;
+    height: auto;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
 .mainContent {
-  width: 80%;
-  max-width: 1500px;
-  height: auto;
-  display: flex;
-  margin: auto;
-  flex-direction: column;
-  overflow-x: hidden;
+    width: 80%;
+    max-width: 1500px;
+    height: auto;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
 }
 
 @media screen and (max-width: 1500px) {
-  .mainContent {
-    width: 90%;
-  }
+    .mainContent {
+        width: 90%;
+    }
 }
 
 div {
-  scroll-margin-top: 70px;
+    scroll-margin-top: 70px;
 }

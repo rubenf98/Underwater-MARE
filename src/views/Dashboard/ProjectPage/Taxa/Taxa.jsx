@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
+import { fetchTaxas } from "../../../../../redux/redux-modules/taxa/actions";
+import { fetchIndicatorSelector } from "../../../../../redux/redux-modules/indicator/actions";
 
 const ContentContainer = styled.div`
     width: 100%;
@@ -18,17 +20,22 @@ const Container = styled.div`
 
 
 
-function Taxa({ data, loading, meta, fetchUsers }) {
+function Taxa({ data, loading, meta, indicators, fetchTaxas, fetchIndicatorSelector }) {
     const [filters, setFilters] = useState({});
     const [visible, setVisible] = useState(false)
     const [currentUser, setCurrentUser] = useState({})
 
     useEffect(() => {
-        // fetchUsers(1, filters);
+        fetchTaxas(1, filters);
     }, [filters])
 
+    useEffect(() => {
+        fetchIndicatorSelector()
+    }, [])
+
+
     function handlePageChange(pagination) {
-        fetchUsers(pagination.current, filters);
+        fetchTaxas(pagination.current, filters);
     }
 
     return (
@@ -42,7 +49,7 @@ function Taxa({ data, loading, meta, fetchUsers }) {
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}
-                    data={data} loading={loading} meta={meta}
+                    data={data} loading={loading} meta={meta} indicators={indicators}
                     setVisible={setVisible} setCurrentUser={setCurrentUser}
                 />
             </ContentContainer>
@@ -50,5 +57,20 @@ function Taxa({ data, loading, meta, fetchUsers }) {
     )
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchTaxas: (page, filters) => dispatch(fetchTaxas(page, filters)),
+        fetchIndicatorSelector: (filters) => dispatch(fetchIndicatorSelector(filters))
+    };
+};
 
-export default Taxa;
+const mapStateToProps = (state) => {
+    return {
+        loading: state.taxa.loading,
+        data: state.taxa.data,
+        meta: state.taxa.meta,
+        indicators: state.indicator.selector,
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Taxa);

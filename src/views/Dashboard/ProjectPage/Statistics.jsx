@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { fetchProjectStatistics } from '../../../../redux/redux-modules/project/actions';
 import styled from "styled-components";
+import { connect } from 'react-redux';
 
 const Container = styled.section`
     width: 100%;
@@ -42,13 +44,18 @@ const Statistic = styled.div`
     
 `;
 
-function Statistics() {
+function Statistics(props) {
+    const { data } = props;
+    useEffect(() => {
+        props.fetchProjectStatistics(props.projectId)
+    }, [])
+
     return (
         <Container>
             <Statistic>
                 <h3>Members</h3>
                 <div className='value'>
-                    <p>5</p>
+                    <p>{data.members}</p>
                     <img src="/assets/icons/users.svg" alt="users" />
                 </div>
             </Statistic>
@@ -56,7 +63,7 @@ function Statistics() {
             <Statistic>
                 <h3>Reports</h3>
                 <div className='value'>
-                    <p>1812</p>
+                    <p>{data.reports}</p>
                     <img src="/assets/icons/reports.svg" alt="users" />
                 </div>
             </Statistic>
@@ -64,7 +71,7 @@ function Statistics() {
             <Statistic>
                 <h3>Sites</h3>
                 <div className='value'>
-                    <p>41</p>
+                    <p>{data.sites}</p>
                     <img src="/assets/icons/sites.svg" alt="users" />
                 </div>
             </Statistic>
@@ -72,7 +79,7 @@ function Statistics() {
             <Statistic>
                 <h3>Taxa</h3>
                 <div className='value'>
-                    <p>217</p>
+                    <p>{data.taxa}</p>
                     <img src="/assets/icons/taxa.svg" alt="users" />
                 </div>
             </Statistic>
@@ -80,4 +87,17 @@ function Statistics() {
     )
 }
 
-export default Statistics
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchProjectStatistics: (id) => dispatch(fetchProjectStatistics(id)),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        loading: state.project.loading,
+        data: state.project.statistics
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Statistics);

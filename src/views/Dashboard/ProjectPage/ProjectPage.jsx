@@ -5,6 +5,7 @@ import Members from './Members/Members';
 import Locality from './Locality/Locality';
 import { Col, Row } from 'antd';
 import Taxa from './Taxa/Taxa';
+import { useParams } from 'react-router-dom';
 
 const Container = styled.section`
     width: 100%;
@@ -14,21 +15,23 @@ const Container = styled.section`
 
 
 function ProjectPage() {
+    let { id } = useParams();
+
     return (
         <Container>
             <Row>
-                <Statistics />
+                <Statistics projectId={id} />
             </Row>
             <Row gutter={64}>
                 <Col xs={12}>
-                    <Members />
+                    <Members projectId={id} />
                 </Col>
                 <Col xs={12}>
-                    <Locality />
+                    <Locality projectId={id} />
                 </Col>
             </Row>
             <Row>
-                <Taxa />
+                <Taxa projectId={id} />
             </Row>
         </Container>
     )

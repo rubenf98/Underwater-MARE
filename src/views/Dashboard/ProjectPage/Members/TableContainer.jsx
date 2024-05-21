@@ -35,21 +35,23 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
 
         {
             title: 'Name',
-            dataIndex: 'name',
+            dataIndex: 'userable',
+            render: (userable) => userable.user.name
+
         },
         {
             title: 'Email',
             dataIndex: 'email',
         },
-        {
-            title: 'Role(s)',
-            dataIndex: 'roles',
-            render: (records) => Object.entries(records).map((value) => (
-                <span key={value[0]}>
-                    {value[1] && <Tag color={colorDecoder[value[0]]}> {value[0]} </Tag>}
-                </ span>
-            ))
-        },
+        // {
+        //     title: 'Role(s)',
+        //     dataIndex: 'roles',
+        //     render: (records) => Object.entries(records).map((value) => (
+        //         <span key={value[0]}>
+        //             {value[1] && <Tag color={colorDecoder[value[0]]}> {value[0]} </Tag>}
+        //         </ span>
+        //     ))
+        // },
         {
             title: '',
             dataIndex: 'Operation',

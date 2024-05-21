@@ -33,20 +33,20 @@ function Report(props) {
         <Container>
 
 
-            <h2>Reports</h2>
+            <h2>Surveys</h2>
 
             <Row style={{ marginBottom: "20px" }}>
-                <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by name or email" />
+                <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by sample code, date, locality or site" />
             </Row>
             <Row gutter={64}>
-                <Col xs={12}>
+                <Col xs={24}>
                     <TableContainer
                         handlePageChange={handlePageChange}
                         data={data} loading={loading} meta={meta}
                         setVisible={setVisible} setCurrentUser={setCurrentUser}
                     />
                 </Col>
-                <Col xs={12}>
+                <Col xs={24}>
                     <ReportMap />
                 </Col>
             </Row>
@@ -63,7 +63,7 @@ function Report(props) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchReports: (id, data) => dispatch(fetchReports(id, data)),
+        fetchReports: (id, filters) => dispatch(fetchReports(id, filters)),
     };
 };
 
@@ -71,6 +71,7 @@ const mapStateToProps = (state) => {
     return {
         loading: state.report.loading,
         data: state.report.data,
+        meta: state.report.meta,
     };
 };
 

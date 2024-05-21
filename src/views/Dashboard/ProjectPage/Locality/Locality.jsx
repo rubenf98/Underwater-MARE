@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
+import { fetchLocalities } from "../../../../../redux/redux-modules/locality/actions";
 
 const ContentContainer = styled.div`
     width: 100%;
@@ -18,17 +19,17 @@ const Container = styled.div`
 
 
 
-function Locality({ data, loading, meta, fetchUsers }) {
-    const [filters, setFilters] = useState({});
+function Locality({ data, loading, meta, fetchLocalities, projectId }) {
+    const [filters, setFilters] = useState({ project: projectId });
     const [visible, setVisible] = useState(false)
-    const [currentUser, setCurrentUser] = useState({})
+    const [current, setCurrent] = useState({})
 
     useEffect(() => {
-        // fetchUsers(1, filters);
+        fetchLocalities(1, filters);
     }, [filters])
 
     function handlePageChange(pagination) {
-        fetchUsers(pagination.current, filters);
+        fetchLocalities(pagination.current, filters);
     }
 
     return (
@@ -36,19 +37,32 @@ function Locality({ data, loading, meta, fetchUsers }) {
             <h2>Site(s) and localities</h2>
             <ContentContainer>
 
-                <FormContainer visible={visible} setVisible={setVisible} currentUser={currentUser} />
+                <FormContainer visible={visible} setVisible={setVisible} currentUser={current} />
                 <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by name or email" />
+                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by locality or site" />
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}
                     data={data} loading={loading} meta={meta}
-                    setVisible={setVisible} setCurrentUser={setCurrentUser}
+                    setVisible={setVisible} setCurrent={setCurrent}
                 />
             </ContentContainer>
         </Container>
     )
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchLocalities: (page, filters) => dispatch(fetchLocalities(page, filters)),
+    };
+};
 
-export default Locality;
+const mapStateToProps = (state) => {
+    return {
+        loading: state.locality.loading,
+        data: state.locality.data,
+        meta: state.locality.meta
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Locality);

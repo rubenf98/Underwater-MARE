@@ -1,0 +1,4 @@
+export const types = {
+    FETCH_LOCALITIES: "FETCH_LOCALITIES",
+    CREATE_LOCALITY: "CREATE_LOCALITY",
+};

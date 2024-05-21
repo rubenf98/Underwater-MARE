@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Popconfirm, Tag } from 'antd';
 import styled from "styled-components";
 import TableComponent from "../../Common/TableComponent";
@@ -20,9 +20,9 @@ const colorDecoder = {
     "validator": "cyan",
 }
 
-function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser, setVisible }) {
-
-    const columns = [
+function TableContainer({ loading, data, meta, indicators, handlePageChange, setCurrentUser, setVisible }) {
+    const [indicatorColumns, setIndicatorColumns] = useState([])
+    let columns = [
         {
             title: '#',
             dataIndex: 'id',
@@ -30,6 +30,7 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
         {
             title: 'Category',
             dataIndex: 'category',
+            render: (category) => category.name
         },
         {
             title: 'Name',
@@ -44,14 +45,12 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
             dataIndex: 'species',
         },
         {
-            title: 'Indicators(s)',
-            dataIndex: 'indicators',
-            render: (records) => Object.entries(records).map((value) => (
-                <span key={value[0]}>
-                    {value[1] && <Tag color={colorDecoder[value[0]]}> {value[0]} </Tag>}
-                </ span>
-            ))
-        },
+            title: 'Phylum',
+            dataIndex: 'phylum',
+        }
+    ];
+
+    const operationColumns = [
         {
             title: '',
             dataIndex: 'Operation',
@@ -62,15 +61,43 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
                     </Popconfirm>
                 ) : null,
         },
-    ];
+    ]
 
+    useEffect(() => {
+        let newColumns = [];
+        if (indicators.length) {
+            let newChildren = [];
+            indicators.map((indicator) => {
+
+                newChildren.push(
+                    {
+                        title: indicator.name,
+                        dataIndex: 'indicators',
+                        render: (indicators) => indicators.map((value) => (
+                            value.name == indicator.name ? value.pivot.name : "---"
+                        ))
+                    }
+                )
+
+            })
+
+            newColumns.push(
+                {
+                    title: 'Indicators(s)',
+                    children: newChildren
+                }
+            )
+        }
+
+        setIndicatorColumns(newColumns)
+    }, [indicators])
 
     return (
         <Container>
             <TableComponent
                 loading={loading}
                 data={data}
-                columns={columns}
+                columns={[...columns, ...indicatorColumns, ...operationColumns]}
                 meta={meta}
                 handlePageChange={(aPage) => handlePageChange(aPage)}
                 onRow={(record) => ({

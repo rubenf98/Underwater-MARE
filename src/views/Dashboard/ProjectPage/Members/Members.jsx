@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
+import { fetchUsers } from "../../../../../redux/redux-modules/user/actions";
 
 const ContentContainer = styled.div`
     width: 100%;
@@ -18,13 +19,13 @@ const Container = styled.div`
 
 
 
-function Members({ data, loading, meta, fetchUsers }) {
-    const [filters, setFilters] = useState({});
+function Members({ data, loading, meta, fetchUsers, projectId }) {
+    const [filters, setFilters] = useState({ project: projectId });
     const [visible, setVisible] = useState(false)
     const [currentUser, setCurrentUser] = useState({})
 
     useEffect(() => {
-        // fetchUsers(1, filters);
+        fetchUsers(1, filters);
     }, [filters])
 
     function handlePageChange(pagination) {
@@ -50,5 +51,18 @@ function Members({ data, loading, meta, fetchUsers }) {
     )
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUsers: (page, filters) => dispatch(fetchUsers(page, filters)),
+    };
+};
 
-export default Members;
+const mapStateToProps = (state) => {
+    return {
+        loading: state.user.loading,
+        data: state.user.data,
+        meta: state.user.meta
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Members);

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { fetchSelfProjects } from '../../../redux/redux-modules/project/actions';
 import styled from 'styled-components'
 
 const Container = styled.section`
@@ -103,22 +104,26 @@ const ProjectContainer = styled.div`
 
 
 function Dashboard(props) {
-    const { user } = props;
+    const { user, projects } = props;
     const profilePic = "https://wave-labs.org/storage/uploaded/photo/profilePicture//default-profile.png";
-    const projects = [
-        {
-            title: "MARE-Madeira",
-            description: "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien.",
-            team: [{ name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }],
-            role: "analyst"
-        },
-        {
-            title: "MARE-Leiria",
-            description: "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien.",
-            team: [{ name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }],
-            role: "analyst"
-        }
-    ]
+    // const projects = [
+    //     {
+    //         title: "MARE-Madeira",
+    //         description: "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien.",
+    //         team: [{ name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }],
+    //         role: "analyst"
+    //     },
+    //     {
+    //         title: "MARE-Leiria",
+    //         description: "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien.",
+    //         team: [{ name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }, { name: "Sandra Sousa", role: "analyst", photo: profilePic }],
+    //         role: "analyst"
+    //     }
+    // ]
+    useEffect(() => {
+        props.fetchSelfProjects();
+    }, [])
+
 
     console.log(user)
     return (
@@ -133,7 +138,7 @@ function Dashboard(props) {
                 {projects.map((project) => (
                     <ProjectContainer>
                         <div className='header'>
-                            <h3>{project.title}</h3>
+                            <h3>{project.name}</h3>
 
                             <div className='links-container'>
                                 <Link to={"/dashboard/reports/" + project.id}> <button><img src="/assets/icons/edit.svg" alt="" /></button></Link>
@@ -146,12 +151,12 @@ function Dashboard(props) {
                         <p>{project.description}</p>
 
                         <div className='team'>
-                            {project.team.map((member) => (
+                            {project.users.map((member) => (
                                 <div key={member.id} className='team-member'>
-                                    <img src={member.photo} alt="profile picture" />
+                                    <img src={"https://wave-labs.org/" + member.photo} alt="profile picture" />
                                     <div className='details'>
-                                        <p className='name'>{member.name}</p>
-                                        <p className='role'>{member.role}</p>
+                                        <p className='name'>{member.userable.user.name}</p>
+                                        {/* <p className='role'>{member.role}</p> */}
                                     </div>
                                 </div>
                             ))}
@@ -163,11 +168,18 @@ function Dashboard(props) {
         </Container >
     )
 }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchSelfProjects: () => dispatch(fetchSelfProjects()),
+    };
+};
+
 
 const mapStateToProps = (state) => {
     return {
         user: state.auth.user,
+        projects: state.project.selfData
     };
 };
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

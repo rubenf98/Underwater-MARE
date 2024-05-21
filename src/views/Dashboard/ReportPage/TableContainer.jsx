@@ -2,6 +2,8 @@ import React from "react";
 import { Avatar, Popconfirm, Tag } from 'antd';
 import styled from "styled-components";
 import TableComponent from "../Common/TableComponent";
+import RowOperation from "../Common/RowOperation";
+import { Children } from "react";
 
 
 const Container = styled.div`
@@ -20,45 +22,158 @@ const colorDecoder = {
     "validator": "cyan",
 }
 
-function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser, setVisible }) {
+function TableContainer({ loading, data, meta, handlePageChange, setVisible }) {
 
     const columns = [
         {
             title: '#',
             dataIndex: 'id',
+            fixed: 'left',
+            width: 50,
         },
         {
-            title: '',
-            dataIndex: 'image',
-            render: (image) => <Avatar size="large" icon={<img src={image} alt="profile" />} />
+            title: 'Sample',
+            dataIndex: 'code',
+            fixed: 'left',
+            width: 250,
         },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            width: 150,
+        },
+        {
+            title: 'Locality',
+            dataIndex: 'site',
+            render: (site) => site.locality.name + " (" + site.locality.code + ")",
+            width: 150,
+        },
+        {
+            title: 'Site',
+            dataIndex: 'site',
+            render: (site) => site.name + " (" + site.code + ")",
+            width: 150,
+        },
+        {
+            title: 'Daily dive#',
+            dataIndex: 'daily_dive',
+            width: 150,
+        },
+        {
+            title: 'Transect#',
+            dataIndex: 'transect',
+            width: 120,
+        },
+        {
+            title: 'Time#',
+            dataIndex: 'time',
+            width: 120,
+        },
+        {
+            title: 'Replica#',
+            dataIndex: 'replica',
+            width: 120,
+        },
+        {
+            title: 'Depth',
+            dataIndex: 'depth',
+            render: (depth) => depth.name + " (" + depth.id + "#)",
+            width: 150,
+        },
+        {
+            title: 'Latitude',
+            dataIndex: 'latitude',
+            width: 150,
+        },
+        {
+            title: 'Longitude',
+            dataIndex: 'longitude',
+            width: 150,
+        },
+        {
+            title: 'Heading',
+            dataIndex: 'heading',
+            width: 150,
+        },
+        {
+            title: 'Heading direction',
+            dataIndex: 'heading_direction',
+            width: 150,
+        },
+        {
+            title: 'Dominant substrate',
+            dataIndex: 'dom_substrate',
+            width: 150,
+        },
+        {
+            title: 'Site area',
+            dataIndex: 'site_area',
+            width: 150,
+        },
+        {
+            title: 'Distance',
+            dataIndex: 'distance',
+            width: 150,
+        },
+        {
+            title: 'Dive team',
+            dataIndex: 'users',
+            children: [
+                {
+                    title: 'FISH',
+                    dataIndex: 'functions',
+                    width: 150,
+                    render: (functions) => functions[0].pivot.user,
+                },
+                {
+                    title: 'CRYPTIC',
+                    dataIndex: 'functions',
+                    width: 150,
+                    render: (functions) => functions[1].pivot.user,
 
-        {
-            title: 'Name',
-            dataIndex: 'name',
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-        },
-        {
-            title: 'Role(s)',
-            dataIndex: 'roles',
-            render: (records) => Object.entries(records).map((value) => (
-                <span key={value[0]}>
-                    {value[1] && <Tag color={colorDecoder[value[0]]}> {value[0]} </Tag>}
-                </ span>
-            ))
+                },
+                {
+                    title: 'MACROINV.',
+                    dataIndex: 'functions',
+                    width: 150,
+                    render: (functions) => functions[2].pivot.user,
+
+                },
+                {
+                    title: 'DOM_URCHIN',
+                    dataIndex: 'functions',
+                    width: 150,
+                    render: (functions) => functions[3].pivot.user,
+
+                },
+                {
+                    title: 'BENTHIC',
+                    dataIndex: 'functions',
+                    width: 150,
+                    render: (functions) => functions[4].pivot.user,
+
+                },
+                {
+                    title: 'PHOTO',
+                    dataIndex: 'functions',
+                    width: 150,
+                    render: (functions) => functions[5].pivot.user,
+
+                },
+            ]
         },
         {
             title: '',
             dataIndex: 'Operation',
+            width: 50,
+            fixed: "right",
             render: (_, record) =>
-                data.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                        <a>Remove</a>
-                    </Popconfirm>
-                ) : null,
+                <RowOperation
+                    deleteRow
+                    updateRow
+                    onUpdateClick={() => setVisible()}
+                    onDeleteConfirm={() => handleDelete(record.id)}
+                />
         },
     ];
 
@@ -71,12 +186,7 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
                 columns={columns}
                 meta={meta}
                 handlePageChange={(aPage) => handlePageChange(aPage)}
-                onRow={(record) => ({
-                    onClick: () => {
-                        setCurrentUser(record);
-                        setVisible(true);
-                    },
-                })}
+                scroll={{ x: 1500 }}
             />
         </Container>
     )

@@ -42,7 +42,7 @@ const Container = styled.div`
 `;
 
 function TableComponent({ onRow, columns, data, meta, handlePageChange, loading,
-    showQuickJumper = false, handleExpandable, bordered = false, title, handleShowSizeChange }) {
+    showQuickJumper = false, handleExpandable, bordered = false, title, handleShowSizeChange, scroll }) {
 
 
 
@@ -70,6 +70,7 @@ function TableComponent({ onRow, columns, data, meta, handlePageChange, loading,
                 size="small"
                 rowKey={(record) => record.id}
                 expandable={handleExpandable}
+                scroll={scroll}
             />
         </Container>
 

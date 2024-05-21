@@ -3,12 +3,20 @@ import auth from "./redux-modules/auth";
 import contact from "./redux-modules/contact";
 import project from "./redux-modules/project";
 import report from "./redux-modules/report";
+import locality from "./redux-modules/locality";
+import user from "./redux-modules/user";
+import taxa from "./redux-modules/taxa";
+import indicator from "./redux-modules/indicator";
 
 const rootReducer = combineReducers({
     auth,
     contact,
     project,
-    report
+    report,
+    locality,
+    user,
+    taxa,
+    indicator
 });
 
 export default rootReducer;

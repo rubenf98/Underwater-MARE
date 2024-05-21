@@ -2,39 +2,40 @@ import { types } from "./types";
 
 const initialState = {
     data: [],
+    meta: {},
     current: {},
     loading: false,
 };
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
-        case `${types.CREATE_REPORT}_PENDING`:
-        case `${types.FETCH_REPORTS}_PENDING`:
+        case `${types.FETCH_LOCALITIES}_PENDING`:
+        case `${types.CREATE_LOCALITY}_PENDING`:
             return {
                 ...state,
                 loading: true,
             };
 
-        case `${types.CREATE_REPORT}_REJECTED`:
-        case `${types.FETCH_REPORTS}_REJECTED`:
+        case `${types.FETCH_LOCALITIES}_REJECTED`:
+        case `${types.CREATE_LOCALITY}_REJECTED`:
             return {
                 ...state,
                 loading: false,
             };
 
-        case `${types.CREATE_REPORT}_FULFILLED`:
-            return {
-                ...state,
-                loading: false,
-                data: [action.payload.data.data, ...state.data]
-            };
-
-        case `${types.FETCH_REPORTS}_FULFILLED`:
+        case `${types.FETCH_LOCALITIES}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 data: action.payload.data.data,
                 meta: action.payload.data.meta
+            };
+
+        case `${types.CREATE_LOCALITY}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: [action.payload.data.data, ...state.data]
             };
 
         default:

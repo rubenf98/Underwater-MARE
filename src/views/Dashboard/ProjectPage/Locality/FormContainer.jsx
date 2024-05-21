@@ -61,7 +61,12 @@ function FormContainer({ visible, setVisible, currentUser, updateUser }) {
             >
                 <Row gutter={32}>
                     <Col xs={24} md={12}>
-                        <Form.Item label="Email*" name="email" rules={[{ ...requiredRule, message: "'email' is required" }]}>
+                        <Form.Item label="Locality*" name="name" rules={[{ ...requiredRule, message: "'locality' is required" }]}>
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                        <Form.Item label="Code*" name="code" rules={[{ ...requiredRule, message: "'code' is required" }]}>
                             <Input />
                         </Form.Item>
                     </Col>

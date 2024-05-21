@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Popconfirm, Tag } from 'antd';
 import styled from "styled-components";
 import TableComponent from "../../Common/TableComponent";
+import RowOperation from "../../Common/RowOperation";
 
 
 const Container = styled.div`
@@ -20,7 +21,7 @@ const colorDecoder = {
     "validator": "cyan",
 }
 
-function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser, setVisible }) {
+function TableContainer({ loading, data, meta, handlePageChange, setVisible }) {
 
     const columns = [
         {
@@ -29,24 +30,26 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
         },
         {
             title: 'Locality',
-            dataIndex: 'locality',
+            dataIndex: 'name',
+            render: (name, row) => name + " (" + row.code + ")"
         },
         {
             title: 'Site(s)',
             dataIndex: 'sites',
             render: (sites) => sites.map((site) => (
-                <span key={site.id}>{site.name} </span>
+                <span key={site.id}>{site.name} ({site.code}), </span>
             ))
         },
         {
             title: '',
             dataIndex: 'Operation',
             render: (_, record) =>
-                data.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                        <a>Remove</a>
-                    </Popconfirm>
-                ) : null,
+                <RowOperation
+                    deleteRow
+                    updateRow
+                    onUpdateClick={() => setVisible()}
+                    onDeleteConfirm={() => handleDelete(record.id)}
+                />
         },
     ];
 
@@ -59,12 +62,6 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
                 columns={columns}
                 meta={meta}
                 handlePageChange={(aPage) => handlePageChange(aPage)}
-                onRow={(record) => ({
-                    onClick: () => {
-                        setCurrentUser(record);
-                        setVisible(true);
-                    },
-                })}
             />
         </Container>
     )

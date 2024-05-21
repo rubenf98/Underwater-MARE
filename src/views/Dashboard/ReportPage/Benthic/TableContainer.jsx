@@ -28,29 +28,24 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
             dataIndex: 'id',
         },
         {
-            title: 'Category',
+            title: 'Sample',
             dataIndex: 'category',
         },
         {
-            title: 'Name',
+            title: 'P##',
             dataIndex: 'name',
         },
         {
-            title: 'Genus',
+            title: 'Substrate',
             dataIndex: 'genus',
         },
         {
-            title: 'Species',
+            title: 'Taxa',
             dataIndex: 'species',
         },
         {
-            title: 'Indicators(s)',
-            dataIndex: 'indicators',
-            render: (records) => Object.entries(records).map((value) => (
-                <span key={value[0]}>
-                    {value[1] && <Tag color={colorDecoder[value[0]]}> {value[0]} </Tag>}
-                </ span>
-            ))
+            title: 'Notes',
+            dataIndex: 'species',
         },
         {
             title: '',

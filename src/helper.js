@@ -1,44 +1,51 @@
 export function getErrorMessages(errors) {
     let messages = [];
-  
+
     Object.values(errors).map(function (message) {
-      messages.push(message[0]);
+        messages.push(message[0]);
     });
-  
+
     return messages;
-  }
-  
-  export function NoDataMessage(message = "Field Not Provided") {
+}
+
+export function NoDataMessage(message = "Field Not Provided") {
     return message;
-  }
-  
-  export const formatPosition = (sighting) => ({
+}
+
+export function handleArrayToFormData(formData, array, field) {
+    for (var i = 0; i < array.length; i++) {
+        formData.append(`${field}[]`, JSON.stringify(array[i]));
+    }
+
+    return formData;
+};
+
+export const formatPosition = (sighting) => ({
     lat: parseFloat(sighting.latitude),
     lng: parseFloat(sighting.longitude),
-  });
-  
-  export function updateDrawerDimensions(window) {
+});
+
+export function updateDrawerDimensions(window) {
     let width = "30%";
     if (window.innerWidth > 1300) {
-      width = "30%";
+        width = "30%";
     } else if (window.innerWidth > 768 && window.innerWidth < 1300) {
-      width = "50%";
+        width = "50%";
     } else if (window.innerWidth < 768) {
-      width = "80%";
+        width = "80%";
     }
-  
+
     return width;
-  }
-  
-  export function getBase64(img, callback) {
+}
+
+export function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
-  }
-  
-  export function dummyRequest({ file, onSuccess }) {
+}
+
+export function dummyRequest({ file, onSuccess }) {
     setTimeout(() => {
-      onSuccess("ok");
+        onSuccess("ok");
     }, 0);
-  }
-  
+}

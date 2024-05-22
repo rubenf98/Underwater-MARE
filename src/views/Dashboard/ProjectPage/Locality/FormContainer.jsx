@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
-import { Col, Form, Input, Modal, Row, Select } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd'
 import { addMember } from "../../../../../redux/redux-modules/project/actions";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { handleArrayToFormData } from 'src/helper';
 
 
 const CustomModal = styled(Modal)`
@@ -13,62 +14,148 @@ const CustomModal = styled(Modal)`
 
 const requiredRule = { required: true };
 
-function FormContainer({ visible, setVisible, currentUser, updateUser }) {
+function FormContainer(props) {
     const [form] = Form.useForm();
+    const [removeIds, setRemoveIds] = useState([]);
+    const [sites, setSites] = useState([]);
+    const { current, visible, projectId } = props
 
-    const create = () => {
+    const handleOk = () => {
         form.validateFields().then(values => {
-            const formData = new FormData();
-            formData.append("name", values.name);
-            formData.append("email", values.email);
-            formData.append("role", values.role);
+            // var formData = new FormData();
+            // formData.append("name", values.name);
+            // formData.append("code", values.code);
+            // formData.append("project_id", projectId);
+            // console.log(values.sites)
+            // formData = handleArrayToFormData(formData, values.sites, "sites")
 
-            updateUser(currentUser.id, formData).then(() => {
-                handleCancel();
-            });
+            var formData = {
+                name: values.name,
+                code: values.code,
+                project_id: projectId,
+                sites: values.sites,
+                removeIDs: removeIds
+            }
+            if (current.id) {
+
+                // formData = handleArrayToFormData(formData, removeIds, "removeIds")
+
+                props.update(current.id, formData).then(() => {
+                    handleCancel();
+                });
+            } else {
+                props.create(formData).then(() => {
+                    handleCancel();
+                });
+            }
+
+
         });
 
     };
 
     const handleCancel = () => {
-        setVisible(false);
+        props.handleCancel();
         form.resetFields();
     };
 
+    const handleSiteRemove = (e, remove, restField) => {
+        if (current.id && sites.length > restField.fieldKey) {
+            setRemoveIds([...removeIds, sites[restField.fieldKey].id])
+        }
+        remove(e)
+    };
+
     useEffect(() => {
-        if (currentUser) {
+        if (current.id) {
+            var aSites = [];
+            current.sites.map((currentSite) => {
+                aSites.push({ name: currentSite.name, code: currentSite.code, id: currentSite.id });
+            })
+            setSites(aSites)
+
             form.setFieldsValue({
-                name: currentUser.name,
-                email: currentUser.email,
+                name: current.name,
+                code: current.code,
+                sites: aSites
             });
         }
 
     }, [visible])
 
-
     return (
         <CustomModal
-            width={1200}
-            title="Invite member"
-            visible={visible}
+            width={720}
+            title="Edit project's sites and localities"
+            open={visible}
             onCancel={handleCancel}
             centered
-            onOk={create}
+            onOk={handleOk}
         >
 
 
-            <Form style={{ margin: "50px auto" }} layout="vertical" hideRequiredMark form={form}
-            >
-                <Row gutter={32}>
+            <Form style={{ margin: "30px auto" }} layout="vertical" requiredMark form={form}>
+                <Row gutter={16}>
                     <Col xs={24} md={12}>
-                        <Form.Item label="Locality*" name="name" rules={[{ ...requiredRule, message: "'locality' is required" }]}>
+                        <Form.Item label="Locality" name="name" rules={[{ ...requiredRule, message: "'locality' is required" }]}>
                             <Input />
                         </Form.Item>
                     </Col>
                     <Col xs={24} md={12}>
-                        <Form.Item label="Code*" name="code" rules={[{ ...requiredRule, message: "'code' is required" }]}>
+                        <Form.Item label="Code" name="code" rules={[{ ...requiredRule, message: "'code' is required" }]}>
                             <Input />
                         </Form.Item>
+                    </Col>
+
+                    <Col span={24}>
+                        <p>Site(s)</p>
+                        <Form.List name="sites">
+                            {(fields, { add, remove }) => (
+                                <>
+                                    {fields.map(({ key, name, ...restField }) => (
+                                        <Row
+                                            key={key}
+                                            gutter={16}
+                                        >
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    {...restField}
+                                                    name={[name, 'name']}
+                                                    rules={[{ ...requiredRule, message: "'site' is required" }]}
+                                                >
+                                                    <Input placeholder="Site Name" />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={11}>
+                                                <Form.Item
+                                                    {...restField}
+                                                    name={[name, 'code']}
+                                                    rules={[{ ...requiredRule, message: "'code' is required" }]}
+                                                >
+                                                    <Input placeholder="Site code" />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={0}>
+                                                <Form.Item
+                                                    {...restField}
+                                                    name={[name, 'id']}                                                >
+                                                    <InputNumber style={{ display: "none" }} />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={1}>
+                                                <div onClick={() => handleSiteRemove(name, remove, restField)} >-</div>
+                                            </Col>
+
+                                        </Row>
+                                    ))}
+                                    <Form.Item>
+                                        <Button type="dashed" onClick={() => add()} block>
+                                            Add site
+                                        </Button>
+                                    </Form.Item>
+                                </>
+                            )}
+                        </Form.List>
                     </Col>
                 </Row>
             </Form>

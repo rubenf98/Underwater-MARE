@@ -15,3 +15,14 @@ export const createLocality = (data) => ({
     type: types.CREATE_LOCALITY,
     payload: axios.post(`${url}/localities`, data),
 });
+
+export const updateLocality = (id, data) => ({
+    type: types.UPDATE_LOCALITY,
+    payload: axios.put(`${url}/localities/${id}`, data),
+});
+
+export const deleteLocality = id => ({
+    type: types.DELETE_LOCALITY,
+    payload: axios.delete(`${url}/localities/${id}`),
+    meta: { id }
+});

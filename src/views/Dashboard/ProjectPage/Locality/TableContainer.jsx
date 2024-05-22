@@ -8,20 +8,16 @@ import RowOperation from "../../Common/RowOperation";
 const Container = styled.div`
     width: 100%;
     
-.editable-row {
-    cursor: pointer;
-}
+    .editable-row {
+        cursor: pointer;
+    }
+    
     .ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
         display: none;
     }
 `;
 
-const colorDecoder = {
-    "admin": "gold",
-    "validator": "cyan",
-}
-
-function TableContainer({ loading, data, meta, handlePageChange, setVisible }) {
+function TableContainer({ loading, data, meta, handlePageChange, setCurrent, handleDelete }) {
 
     const columns = [
         {
@@ -47,7 +43,7 @@ function TableContainer({ loading, data, meta, handlePageChange, setVisible }) {
                 <RowOperation
                     deleteRow
                     updateRow
-                    onUpdateClick={() => setVisible()}
+                    onUpdateClick={() => setCurrent(record)}
                     onDeleteConfirm={() => handleDelete(record.id)}
                 />
         },

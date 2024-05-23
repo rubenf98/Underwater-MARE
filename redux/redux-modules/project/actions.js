@@ -19,8 +19,29 @@ export const createProject = (data) => ({
     payload: axios.post(`${url}/projects`, data),
 });
 
+export const updateProject = (id, data) => ({
+    type: types.UPDATE_PROJECT,
+    payload: axios.put(`${url}/projects/${id}`, data),
+});
 
-export const addMember = (data) => ({
-    type: types.ADD_MEMBER,
-    payload: axios.post(`${url}/projects/add-member`, data),
+export const deleteProject = id => ({
+    type: types.DELETE_PROJECT,
+    payload: axios.delete(`${url}/projects/${id}`),
+    meta: { id }
+});
+
+export const fetchProjectInvites = () => ({
+    type: types.FETCH_PROJECT_INVITES,
+    payload: axios.get(`${url}/invites`),
+});
+
+
+export const inviteMember = (data) => ({
+    type: types.INVITE_MEMBER,
+    payload: axios.post(`${url}/invite-member`, data),
+});
+
+export const respondToInvite = (id, data) => ({
+    type: types.RESPOND_TO_INVITE,
+    payload: axios.put(`${url}/accept-member/${id}`, data),
 });

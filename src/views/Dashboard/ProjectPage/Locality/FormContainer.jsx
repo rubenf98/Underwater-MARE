@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd'
-import { addMember } from "../../../../../redux/redux-modules/project/actions";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { handleArrayToFormData } from 'src/helper';
@@ -165,11 +164,7 @@ function FormContainer(props) {
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addMember: (id, data) => dispatch(addMember(id, data)),
-    };
-};
+
 
 const mapStateToProps = (state) => {
     return {
@@ -177,4 +172,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormContainer);
+export default connect(mapStateToProps, null)(FormContainer);

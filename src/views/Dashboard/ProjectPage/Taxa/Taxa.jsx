@@ -20,8 +20,8 @@ const Container = styled.div`
 
 
 
-function Taxa({ data, loading, meta, indicators, fetchTaxas, fetchIndicatorSelector }) {
-    const [filters, setFilters] = useState({});
+function Taxa({ data, loading, meta, indicators, fetchTaxas, fetchIndicatorSelector, projectId }) {
+    const [filters, setFilters] = useState({ project: projectId });
     const [visible, setVisible] = useState(false)
     const [currentUser, setCurrentUser] = useState({})
 

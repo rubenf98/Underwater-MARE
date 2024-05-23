@@ -48,9 +48,9 @@ function FormContainer({ visible, setVisible, currentUser, updateUser }) {
 
     return (
         <CustomModal
-            width={1200}
+            width={720}
             title="Invite member"
-            visible={visible}
+            open={visible}
             onCancel={handleCancel}
             centered
             onOk={create}
@@ -73,16 +73,4 @@ function FormContainer({ visible, setVisible, currentUser, updateUser }) {
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addMember: (id, data) => dispatch(addMember(id, data)),
-    };
-};
-
-const mapStateToProps = (state) => {
-    return {
-        loading: state.project.loading,
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormContainer);
+export default FormContainer;

@@ -5,6 +5,7 @@ import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
 import { fetchLocalities, createLocality, updateLocality, deleteLocality } from "../../../../../redux/redux-modules/locality/actions";
+import TitleAddSection from "../../Common/TitleAddSection";
 
 const ContentContainer = styled.div`
     width: 100%;
@@ -16,28 +17,6 @@ const Container = styled.section`
     box-sizing: border-box;
     
 `;
-
-const Title = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    button {
-        background-color: #044582ff;
-        padding: 7px;
-        box-sizing: border-box;
-        box-shadow: 0px;
-        border: 0px;
-        cursor: pointer;
-        border-radius: 4px;
-
-        img {
-            width: 13px;
-        }
-    }
-`;
-
 
 function Locality(props) {
     const { data, loading, meta, projectId } = props;
@@ -66,13 +45,13 @@ function Locality(props) {
 
     return (
         <Container>
-            <Title>
-                <h2>Site(s) and localities</h2>
-                <button onClick={() => setVisible(true)}><img src="/assets/icons/add.svg" alt="add icon to create a new entry" /></button>
-            </Title>
+            <TitleAddSection
+                title="Site(s) and localities"
+                handleClick={() => setVisible(true)}
+            />
+
 
             <ContentContainer>
-
                 <FormContainer
                     visible={visible}
                     handleCancel={handleCancel}

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Col, Form, Input, Modal, Row, Select } from 'antd'
-import { addMember } from "../../../../../redux/redux-modules/project/actions";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -73,16 +72,5 @@ function FormContainer({ visible, setVisible, currentUser, updateUser }) {
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addMember: (id, data) => dispatch(addMember(id, data)),
-    };
-};
 
-const mapStateToProps = (state) => {
-    return {
-        loading: state.project.loading,
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormContainer);
+export default FormContainer;

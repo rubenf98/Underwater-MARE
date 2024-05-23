@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Col, Form, Input, Modal, Row, Select } from 'antd'
-import { addMember } from "../../../../../redux/redux-modules/project/actions";
+import { inviteMember } from "../../../../../redux/redux-modules/project/actions";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -13,17 +13,13 @@ const CustomModal = styled(Modal)`
 
 const requiredRule = { required: true };
 
-function FormContainer({ visible, setVisible, currentUser, updateUser }) {
+function FormContainer({ visible, setVisible, inviteMember, projectId }) {
     const [form] = Form.useForm();
 
     const create = () => {
         form.validateFields().then(values => {
-            const formData = new FormData();
-            formData.append("name", values.name);
-            formData.append("email", values.email);
-            formData.append("role", values.role);
 
-            updateUser(currentUser.id, formData).then(() => {
+            inviteMember({ ...values, project_id: projectId }).then(() => {
                 handleCancel();
             });
         });
@@ -35,34 +31,25 @@ function FormContainer({ visible, setVisible, currentUser, updateUser }) {
         form.resetFields();
     };
 
-    useEffect(() => {
-        if (currentUser) {
-            form.setFieldsValue({
-                name: currentUser.name,
-                email: currentUser.email,
-            });
-        }
-
-    }, [visible])
 
 
     return (
         <CustomModal
-            width={1200}
-            title="Invite member"
-            visible={visible}
+            width={720}
+            title="Invite a member to the project"
+            open={visible}
             onCancel={handleCancel}
             centered
             onOk={create}
         >
 
 
-            <Form style={{ margin: "50px auto" }} layout="vertical" hideRequiredMark form={form}
+            <Form style={{ margin: "50px auto" }} layout="vertical" form={form}
             >
                 <Row gutter={32}>
-                    <Col xs={24} md={12}>
-                        <Form.Item label="Email*" name="email" rules={[{ ...requiredRule, message: "'email' is required" }]}>
-                            <Input />
+                    <Col span={24}>
+                        <Form.Item label="Invite a member through the registration email" name="email" rules={[{ ...requiredRule, message: "'email' is required" }]}>
+                            <Input placeholder='example@underwater-survey.org' />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -75,7 +62,7 @@ function FormContainer({ visible, setVisible, currentUser, updateUser }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addMember: (id, data) => dispatch(addMember(id, data)),
+        inviteMember: (data) => dispatch(inviteMember(data)),
     };
 };
 

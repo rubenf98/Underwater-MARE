@@ -5,6 +5,7 @@ import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
 import { fetchUsers } from "../../../../../redux/redux-modules/user/actions";
+import TitleAddSection from "../../Common/TitleAddSection";
 
 const ContentContainer = styled.div`
     width: 100%;
@@ -34,10 +35,13 @@ function Members({ data, loading, meta, fetchUsers, projectId }) {
 
     return (
         <Container>
-            <h2>Member(s)</h2>
+            <TitleAddSection
+                title="Member(s)"
+                handleClick={() => setVisible(true)}
+            />
             <ContentContainer>
 
-                <FormContainer visible={visible} setVisible={setVisible} currentUser={currentUser} />
+                <FormContainer visible={visible} setVisible={setVisible} projectId={projectId} />
                 <Row style={{ marginBottom: "20px" }}>
                     <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by name or email" />
                 </Row>

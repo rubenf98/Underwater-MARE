@@ -52,16 +52,16 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
         //         </ span>
         //     ))
         // },
-        {
-            title: '',
-            dataIndex: 'Operation',
-            render: (_, record) =>
-                data.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                        <a>Remove</a>
-                    </Popconfirm>
-                ) : null,
-        },
+        // {
+        //     title: '',
+        //     dataIndex: 'Operation',
+        //     render: (_, record) =>
+        //         data.length >= 1 ? (
+        //             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+        //                 <a>Remove</a>
+        //             </Popconfirm>
+        //         ) : null,
+        // },
     ];
 
 

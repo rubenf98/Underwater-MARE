@@ -73,12 +73,6 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
                 columns={columns}
                 meta={meta}
                 handlePageChange={(aPage) => handlePageChange(aPage)}
-                onRow={(record) => ({
-                    onClick: () => {
-                        setCurrentUser(record);
-                        setVisible(true);
-                    },
-                })}
             />
         </Container>
     )

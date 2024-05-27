@@ -22,3 +22,14 @@ export const createIndicator = (data) => ({
     type: types.CREATE_INDICATOR,
     payload: axios.post(`${url}/indicators`, data),
 });
+
+export const updateIndicator = (id, data) => ({
+    type: types.UPDATE_INDICATOR,
+    payload: axios.put(`${url}/indicators/${id}`, data),
+});
+
+export const deleteIndicator = id => ({
+    type: types.DELETE_INDICATOR,
+    payload: axios.delete(`${url}/indicators/${id}`),
+    meta: { id }
+});

@@ -7,6 +7,7 @@ import locality from "./redux-modules/locality";
 import user from "./redux-modules/user";
 import taxa from "./redux-modules/taxa";
 import indicator from "./redux-modules/indicator";
+import category from "./redux-modules/category";
 
 const rootReducer = combineReducers({
     auth,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     locality,
     user,
     taxa,
-    indicator
+    indicator,
+    category
 });
 
 export default rootReducer;

@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
-import { fetchTaxas } from "../../../../../redux/redux-modules/taxa/actions";
-import { fetchIndicatorSelector } from "../../../../../redux/redux-modules/indicator/actions";
+import { fetchIndicators, createIndicator, updateIndicator, deleteIndicator } from "../../../../../redux/redux-modules/indicator/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
 
 const ContentContainer = styled.div`
@@ -13,29 +12,26 @@ const ContentContainer = styled.div`
     margin: auto;
 `;
 
-const Container = styled.div`
+const Container = styled.section`
     width: 100%;
     box-sizing: border-box;
     
 `;
 
-
-
-function Taxa(props) {
-    const { data, loading, meta, projectId, indicators } = props;
-
+function Indicator(props) {
+    const { data, loading, meta, projectId } = props;
 
     const [filters, setFilters] = useState({ project: projectId });
     const [visible, setVisible] = useState(false)
     const [current, setCurrent] = useState({})
 
     useEffect(() => {
-        props.fetchTaxas(1, filters);
+        props.fetchIndicators(1, filters);
     }, [filters])
 
-    useEffect(() => {
-        props.fetchIndicatorSelector(filters)
-    }, [])
+    function handlePageChange(pagination) {
+        props.fetchIndicators(pagination.current, filters);
+    }
 
     const handleCancel = () => {
         setCurrent({});
@@ -47,35 +43,31 @@ function Taxa(props) {
         setVisible(true)
     }
 
-    function handlePageChange(pagination) {
-        props.fetchTaxas(pagination.current, filters);
-    }
-
     return (
         <Container>
             <TitleAddSection
-                title="Project taxa"
+                title="Indicator(s)"
                 handleClick={() => setVisible(true)}
             />
 
-            <ContentContainer>
 
+            <ContentContainer>
                 <FormContainer
                     visible={visible}
                     handleCancel={handleCancel}
                     current={current}
-                    create={props.createTaxa}
-                    update={props.updateTaxa}
+                    create={props.createIndicator}
+                    update={props.updateIndicator}
                     projectId={projectId}
                 />
                 <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by species, genus, phylum or category" />
+                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by indicator" />
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}
-                    data={data} loading={loading} meta={meta} indicators={indicators}
+                    data={data} loading={loading} meta={meta}
                     setCurrent={handleEdit}
-                    handleDelete={props.deleteLocality}
+                    handleDelete={props.deleteIndicator}
                 />
             </ContentContainer>
         </Container>
@@ -84,18 +76,20 @@ function Taxa(props) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchTaxas: (page, filters) => dispatch(fetchTaxas(page, filters)),
-        fetchIndicatorSelector: (filters) => dispatch(fetchIndicatorSelector(filters))
+        fetchIndicators: (page, filters) => dispatch(fetchIndicators(page, filters)),
+        updateIndicator: (id, data) => dispatch(updateIndicator(id, data)),
+        createIndicator: (data) => dispatch(createIndicator(data)),
+        deleteIndicator: (id) => dispatch(deleteIndicator(id))
+
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.taxa.loading,
-        data: state.taxa.data,
-        meta: state.taxa.meta,
-        indicators: state.indicator.selector,
+        loading: state.indicator.loading,
+        data: state.indicator.data,
+        meta: state.indicator.meta
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Taxa);
+export default connect(mapStateToProps, mapDispatchToProps)(Indicator);

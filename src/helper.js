@@ -8,6 +8,14 @@ export function getErrorMessages(errors) {
     return messages;
 }
 
+export const dimensions = {
+    "xs": "575px",
+    "sm": "576px",
+    "md": "768px",
+    "lg": "992px",
+    "xl": "1200px",
+    "xxl": "1600px",
+};
 export function NoDataMessage(message = "Field Not Provided") {
     return message;
 }
@@ -19,6 +27,7 @@ export function handleArrayToFormData(formData, array, field) {
 
     return formData;
 };
+export const requiredRule = [{ required: true, message: "'field' is required" }];
 
 export const formatPosition = (sighting) => ({
     lat: parseFloat(sighting.latitude),

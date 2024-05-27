@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Popconfirm, Tag } from 'antd';
 import styled from "styled-components";
 import TableComponent from "../../Common/TableComponent";
+import RowOperation from "../../Common/RowOperation";
 
 
 const Container = styled.div`
@@ -20,7 +21,8 @@ const colorDecoder = {
     "validator": "cyan",
 }
 
-function TableContainer({ loading, data, meta, indicators, handlePageChange, setCurrentUser, setVisible }) {
+function TableContainer({ loading, data, meta, indicators, handlePageChange, setCurrent,
+    handleDelete, setVisible }) {
     const [indicatorColumns, setIndicatorColumns] = useState([])
     let columns = [
         {
@@ -55,11 +57,12 @@ function TableContainer({ loading, data, meta, indicators, handlePageChange, set
             title: '',
             dataIndex: 'Operation',
             render: (_, record) =>
-                data.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                        <a>Remove</a>
-                    </Popconfirm>
-                ) : null,
+                <RowOperation
+                    deleteRow
+                    updateRow
+                    onUpdateClick={() => setCurrent(record)}
+                    onDeleteConfirm={() => handleDelete(record.id)}
+                />
         },
     ]
 
@@ -74,7 +77,7 @@ function TableContainer({ loading, data, meta, indicators, handlePageChange, set
                         title: indicator.name,
                         dataIndex: 'indicators',
                         render: (indicators) => indicators.map((value) => (
-                            value.name == indicator.name ? value.pivot.name : "---"
+                            (value.name === indicator.name) && value.pivot.name
                         ))
                     }
                 )
@@ -100,12 +103,6 @@ function TableContainer({ loading, data, meta, indicators, handlePageChange, set
                 columns={[...columns, ...indicatorColumns, ...operationColumns]}
                 meta={meta}
                 handlePageChange={(aPage) => handlePageChange(aPage)}
-                onRow={(record) => ({
-                    onClick: () => {
-                        setCurrentUser(record);
-                        setVisible(true);
-                    },
-                })}
             />
         </Container>
     )

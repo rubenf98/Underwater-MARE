@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { fetchProjectStatistics } from '../../../../redux/redux-modules/project/actions';
 import styled from "styled-components";
 import { connect } from 'react-redux';
+import { dimensions } from 'src/helper';
 
 const Container = styled.section`
     width: 100%;
@@ -9,13 +10,13 @@ const Container = styled.section`
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
-    gap: 50px;
     margin-bottom: 50px;
+    flex-wrap: wrap;
 `;
 
 
 const Statistic = styled.div`
-    width: 25%;
+    flex-basis: calc(25% - 30px);
     box-sizing: border-box;
     box-shadow: 0px 0px 10px 2px rgba(0,0,0,.1);
     padding: 10px 20px 0px 20px;
@@ -40,6 +41,16 @@ const Statistic = styled.div`
         img {
             width: 50%;
         }
+    }
+
+    @media(max-width: ${dimensions.md}) {
+        flex-basis: calc(50% - 30px);
+        margin: 15px 0px;
+    }
+
+    @media(max-width: ${dimensions.xs}) {
+        flex-basis: 100%;
+        margin: 15px 0px;
     }
     
 `;

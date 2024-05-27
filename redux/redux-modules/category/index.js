@@ -10,35 +10,35 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
-        case `${types.FETCH_INDICATORS}_PENDING`:
-        case `${types.FETCH_INDICATOR_SELECTOR}_PENDING`:
-        case `${types.UPDATE_INDICATOR}_PENDING`:
-        case `${types.DELETE_INDICATOR}_PENDING`:
-        case `${types.CREATE_INDICATOR}_PENDING`:
+        case `${types.FETCH_CATEGORIES}_PENDING`:
+        case `${types.FETCH_SELECTOR_CATEGORIES}_PENDING`:
+        case `${types.CREATE_CATEGORY}_PENDING`:
+        case `${types.DELETE_CATEGORY}_PENDING`:
+        case `${types.UPDATE_CATEGORY}_PENDING`:
 
             return {
                 ...state,
                 loading: true,
             };
 
-        case `${types.FETCH_INDICATORS}_REJECTED`:
-        case `${types.FETCH_INDICATOR_SELECTOR}_REJECTED`:
-        case `${types.CREATE_INDICATOR}_REJECTED`:
-        case `${types.DELETE_INDICATOR}_REJECTED`:
-        case `${types.UPDATE_INDICATOR}_REJECTED`:
+        case `${types.FETCH_CATEGORIES}_REJECTED`:
+        case `${types.FETCH_SELECTOR_CATEGORIES}_PENDING`:
+        case `${types.CREATE_CATEGORY}_REJECTED`:
+        case `${types.DELETE_CATEGORY}_REJECTED`:
+        case `${types.UPDATE_CATEGORY}_REJECTED`:
             return {
                 ...state,
                 loading: false,
             };
 
-        case `${types.FETCH_INDICATOR_SELECTOR}_FULFILLED`:
+        case `${types.FETCH_SELECTOR_CATEGORIES}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 selector: action.payload.data.data,
             };
 
-        case `${types.FETCH_INDICATORS}_FULFILLED`:
+        case `${types.FETCH_CATEGORIES}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
@@ -46,21 +46,21 @@ export default (state = initialState, action = {}) => {
                 meta: action.payload.data.meta
             };
 
-        case `${types.CREATE_INDICATOR}_FULFILLED`:
+        case `${types.CREATE_CATEGORY}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 data: [action.payload.data.data, ...state.data]
             };
 
-        case `${types.DELETE_INDICATOR}_FULFILLED`:
+        case `${types.DELETE_CATEGORY}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 data: state.data.filter(record => record.id !== action.meta.id)
             };
 
-        case `${types.UPDATE_INDICATOR}_FULFILLED`:
+        case `${types.UPDATE_CATEGORY}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
@@ -70,6 +70,7 @@ export default (state = initialState, action = {}) => {
                         : record
                 )
             };
+
         default:
             return state;
     }

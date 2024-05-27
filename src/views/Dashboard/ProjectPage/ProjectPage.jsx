@@ -6,6 +6,7 @@ import Locality from './Locality/Locality';
 import { Col, Row } from 'antd';
 import Taxa from './Taxa/Taxa';
 import { useParams } from 'react-router-dom';
+import Indicator from './Indicator/Indicator';
 
 const Container = styled.section`
     width: 100%;
@@ -23,15 +24,18 @@ function ProjectPage() {
                 <Statistics projectId={id} />
             </Row>
             <Row gutter={64}>
-                <Col xs={12}>
+                <Col md={24} lg={12}>
                     <Members projectId={id} />
                 </Col>
-                <Col xs={12}>
+                <Col md={24} lg={12}>
                     <Locality projectId={id} />
                 </Col>
             </Row>
             <Row>
                 <Taxa projectId={id} />
+            </Row>
+            <Row>
+                <Indicator projectId={id} />
             </Row>
         </Container>
     )

@@ -12,7 +12,24 @@ export const fetchReports = (page = 1, filters = {}) => ({
     })}&page=${page}`)
 });
 
-export const createProject = (data) => ({
+export const fetchReportCoordinates = (limit = 100) => ({
+    type: types.FETCH_REPORT_COORDINATES,
+    payload: axios.get(`${url}/selector/report-coordinates?limit=${limit}`)
+});
+
+
+export const createReport = (data) => ({
     type: types.CREATE_REPORT,
-    payload: axios.post(`${url}/project`, data),
+    payload: axios.post(`${url}/reports`, data),
+});
+
+export const updateReport = (id, data) => ({
+    type: types.UPDATE_REPORT,
+    payload: axios.put(`${url}/reports/${id}`, data),
+});
+
+export const deleteReport = id => ({
+    type: types.DELETE_REPORT,
+    payload: axios.delete(`${url}/reports/${id}`),
+    meta: { id }
 });

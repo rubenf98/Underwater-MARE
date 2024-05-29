@@ -2,48 +2,43 @@ import { types } from "./types";
 
 const initialState = {
     data: [],
-    coordinates: [],
+    selector: [],
+    meta: {},
     current: {},
     loading: false,
 };
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
-        case `${types.CREATE_REPORT}_PENDING`:
-        case `${types.FETCH_REPORTS}_PENDING`:
-        case `${types.UPDATE_REPORT}_PENDING`:
-        case `${types.DELETE_REPORT}_PENDING`:
-        case `${types.FETCH_REPORT_COORDINATES}_PENDING`:
+        case `${types.FETCH_FUNCTIONS}_PENDING`:
+        case `${types.FETCH_SELECTOR_FUNCTIONS}_PENDING`:
+        case `${types.CREATE_FUNCTION}_PENDING`:
+        case `${types.DELETE_FUNCTION}_PENDING`:
+        case `${types.UPDATE_FUNCTION}_PENDING`:
+
             return {
                 ...state,
                 loading: true,
             };
 
-        case `${types.CREATE_REPORT}_REJECTED`:
-        case `${types.FETCH_REPORTS}_REJECTED`:
-        case `${types.UPDATE_REPORT}_REJECTED`:
-        case `${types.DELETE_REPORT}_REJECTED`:
-        case `${types.FETCH_REPORT_COORDINATES}_REJECTED`:
+        case `${types.FETCH_FUNCTIONS}_REJECTED`:
+        case `${types.FETCH_SELECTOR_FUNCTIONS}_PENDING`:
+        case `${types.CREATE_FUNCTION}_REJECTED`:
+        case `${types.DELETE_FUNCTION}_REJECTED`:
+        case `${types.UPDATE_FUNCTION}_REJECTED`:
             return {
                 ...state,
                 loading: false,
             };
 
-        case `${types.FETCH_REPORT_COORDINATES}_FULFILLED`:
+        case `${types.FETCH_SELECTOR_FUNCTIONS}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
-                coordinates: action.payload.data,
+                selector: action.payload.data.data,
             };
 
-        case `${types.CREATE_REPORT}_FULFILLED`:
-            return {
-                ...state,
-                loading: false,
-                data: [action.payload.data.data, ...state.data]
-            };
-
-        case `${types.FETCH_REPORTS}_FULFILLED`:
+        case `${types.FETCH_FUNCTIONS}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
@@ -51,14 +46,21 @@ export default (state = initialState, action = {}) => {
                 meta: action.payload.data.meta
             };
 
-        case `${types.DELETE_REPORT}_FULFILLED`:
+        case `${types.CREATE_FUNCTION}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: [action.payload.data.data, ...state.data]
+            };
+
+        case `${types.DELETE_FUNCTION}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 data: state.data.filter(record => record.id !== action.meta.id)
             };
 
-        case `${types.UPDATE_REPORT}_FULFILLED`:
+        case `${types.UPDATE_FUNCTION}_FULFILLED`:
             return {
                 ...state,
                 loading: false,

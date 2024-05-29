@@ -19,7 +19,9 @@ function ProjectPage() {
     let { id } = useParams();
 
     return (
+
         <Container>
+            {/* TODO: DEPTHS AND FUNCTIONS TABLES */}
             <Row>
                 <Statistics projectId={id} />
             </Row>

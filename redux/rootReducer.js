@@ -8,6 +8,8 @@ import user from "./redux-modules/user";
 import taxa from "./redux-modules/taxa";
 import indicator from "./redux-modules/indicator";
 import category from "./redux-modules/category";
+import depth from "./redux-modules/depth";
+import _function from "./redux-modules/function";
 
 const rootReducer = combineReducers({
     auth,
@@ -18,7 +20,9 @@ const rootReducer = combineReducers({
     user,
     taxa,
     indicator,
-    category
+    category,
+    depth,
+    _function
 });
 
 export default rootReducer;

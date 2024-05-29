@@ -11,6 +11,13 @@ export const fetchLocalities = (page = 1, filters = {}) => ({
     })}&page=${page}`)
 });
 
+export const fetchSelectorLocalities = (filters = {}) => ({
+    type: types.FETCH_SELECTOR_LOCALITIES,
+    payload: axios.get(`${url}/selector/localities?${queryString.stringify(filters, {
+        arrayFormat: "index"
+    })}`)
+});
+
 export const createLocality = (data) => ({
     type: types.CREATE_LOCALITY,
     payload: axios.post(`${url}/localities`, data),

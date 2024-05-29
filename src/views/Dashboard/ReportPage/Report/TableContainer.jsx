@@ -1,8 +1,8 @@
 import React from "react";
 import { Avatar, Popconfirm, Tag } from 'antd';
 import styled from "styled-components";
-import TableComponent from "../Common/TableComponent";
-import RowOperation from "../Common/RowOperation";
+import TableComponent from "../../Common/TableComponent";
+import RowOperation from "../../Common/RowOperation";
 import { Children } from "react";
 
 
@@ -22,7 +22,7 @@ const colorDecoder = {
     "validator": "cyan",
 }
 
-function TableContainer({ loading, data, meta, handlePageChange, setVisible }) {
+function TableContainer({ loading, data, meta, handlePageChange, setCurrent, handleDelete }) {
 
     const columns = [
         {
@@ -171,7 +171,7 @@ function TableContainer({ loading, data, meta, handlePageChange, setVisible }) {
                 <RowOperation
                     deleteRow
                     updateRow
-                    onUpdateClick={() => setVisible()}
+                    onUpdateClick={() => setCurrent(record)}
                     onDeleteConfirm={() => handleDelete(record.id)}
                 />
         },

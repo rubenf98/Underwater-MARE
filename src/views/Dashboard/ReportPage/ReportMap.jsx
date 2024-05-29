@@ -1,65 +1,34 @@
-import { useEffect, useMemo } from "react";
-import Map, { Source, Layer } from "react-map-gl";
-import { fetchReports } from "../../../../redux/redux-modules/report/actions";
+import React, { useEffect, useState } from "react";
+import Map, { Marker, Popup } from "react-map-gl";
+import { fetchReportCoordinates } from "../../../../redux/redux-modules/report/actions";
 import { connect } from "react-redux";
-import { Spin } from "antd";
+import styled from "styled-components";
 
-const layerStyle = {
-    id: "point",
-    type: "heatmap",
-    paint: {
-        "heatmap-radius": 15,
-        "heatmap-color": [
-            "interpolate",
-            ["linear"],
-            ["heatmap-density"],
-            0,
-            "rgba(255, 0, 0, 0)",
-            0.1,
-            "rgba(255, 130, 130, 0.4)",
+const PopupContent = styled.div`
+    box-sizing: border-box;
+    padding: 10px;
 
-            0.5,
-            "rgba(255, 180, 180, 0.8)",
+    p {
+        margin: 0px;
 
-            1,
-            "rgba(255, 230, 230, 0.9)",
-        ],
-    },
-};
+        span {
+            font-weight: bold;
+        }
+    }
+
+    .date {
+        margin-bottom: 10px;
+        opacity: .6;
+    }
+`;
 
 function ReportMap(props) {
-    const { filters, coordinatesData, loading } = props;
+    const { data, loading } = props;
+    const [popupInfo, setPopupInfo] = useState(null);
 
     useEffect(() => {
-        // props.fetchDiveCoords(filters);
-    }, [filters]);
-
-    // const geoJsons = useMemo(() => {
-    //     let newCoordinates = [];
-    //     coordinatesData.map((element) => {
-    //         newCoordinates.push([element.longitude, element.latitude]);
-    //     });
-    //     return (
-    //         <Source
-    //             key={1}
-    //             type="geojson"
-    //             data={{
-    //                 type: "FeatureCollection",
-    //                 features: [
-    //                     {
-    //                         type: "Feature",
-    //                         geometry: {
-    //                             type: "MultiPoint",
-    //                             coordinates: newCoordinates,
-    //                         },
-    //                     },
-    //                 ],
-    //             }}
-    //         >
-    //             <Layer key={2} {...layerStyle} />
-    //         </Source>
-    //     );
-    // }, [coordinatesData]);
+        props.fetchReportCoordinates()
+    }, []);
 
     return (
         <div >
@@ -73,21 +42,46 @@ function ReportMap(props) {
                 style={{
                     height: "100%",
                     width: "100%",
-                    borderRadius: "20px",
+                    minHeight: "500px",
                 }}
 
                 mapStyle="mapbox://styles/tigerwhale/cjpgrt1sccjs92sqjfnuixnxc"
             >
-                {loading && (
-                    <Spin
-                        style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
+
+
+                {data.map((report) => (
+                    <Marker
+                        key={report.id}
+                        latitude={report.latitude}
+                        color="red"
+                        longitude={report.longitude}
+                        onClick={e => {
+                            // If we let the click event propagates to the map, it will immediately close the popup
+                            // with `closeOnClick: true`
+                            e.originalEvent.stopPropagation();
+                            setPopupInfo(report);
                         }}
                     />
+                ))}
+                {popupInfo && (
+                    <Popup
+                        anchor="top"
+                        longitude={Number(popupInfo.longitude)}
+                        latitude={Number(popupInfo.latitude)}
+                        onClose={() => setPopupInfo(null)}
+                    >
+                        <PopupContent>
+                            <p><span>Sample:</span> {popupInfo.code}</p>
+                            <p className="date">{popupInfo.date}</p>
+
+
+                            <a>
+                                View more
+                            </a>
+                        </PopupContent>
+                    </Popup>
                 )}
-                {/* {!loading && geoJsons} */}
+
             </Map>
         </div>
     );
@@ -95,13 +89,13 @@ function ReportMap(props) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchDiveCoords: (filters) => dispatch(fetchDiveCoords(filters)),
+        fetchReportCoordinates: (filters) => dispatch(fetchReportCoordinates(filters)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        // coordinatesData: state.report.coordinatesData,
+        data: state.report.coordinates,
         loading: state.report.loading,
     };
 };

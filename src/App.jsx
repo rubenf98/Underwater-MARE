@@ -8,7 +8,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./views/Login/Login";
 import Register from "./views/Register/Register";
 import ProjectPage from "./views/Dashboard/ProjectPage/ProjectPage";
-import Report from "./views/Dashboard/ReportPage/Report";
+import ReportPage from "./views/Dashboard/ReportPage/ReportPage";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
     return (
@@ -43,7 +44,7 @@ function App() {
                             path="/dashboard/reports/:id"
                             element={
                                 <PrivateRoute>
-                                    <Report />
+                                    <ReportPage />
                                 </PrivateRoute>
                             }
                         />

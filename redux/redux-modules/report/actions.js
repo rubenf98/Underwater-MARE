@@ -12,6 +12,13 @@ export const fetchReports = (page = 1, filters = {}) => ({
     })}&page=${page}`)
 });
 
+export const fetchSelectorReports = (filters = {}) => ({
+    type: types.FETCH_SELECTOR_REPORTS,
+    payload: axios.get(`${url}/selector/reports?${queryString.stringify(filters, {
+        arrayFormat: "index"
+    })}`)
+});
+
 export const fetchReportCoordinates = (limit = 100) => ({
     type: types.FETCH_REPORT_COORDINATES,
     payload: axios.get(`${url}/selector/report-coordinates?limit=${limit}`)

@@ -21,7 +21,7 @@ function ProjectPage() {
     return (
 
         <Container>
-            {/* TODO: DEPTHS AND FUNCTIONS TABLES */}
+            {/* TODO: DEPTHS, SUBTRATES AND FUNCTIONS TABLES */}
             <Row>
                 <Statistics projectId={id} />
             </Row>

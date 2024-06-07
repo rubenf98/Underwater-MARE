@@ -42,7 +42,7 @@ const Container = styled.div`
 `;
 
 function TableComponent({ onRow, columns, data, meta, handlePageChange, loading,
-    showQuickJumper = false, handleExpandable, bordered = false, title, handleShowSizeChange, scroll }) {
+    showQuickJumper = false, rowKey = "id", handleExpandable, bordered = false, title, handleShowSizeChange, scroll, rowSelection }) {
 
 
 
@@ -54,6 +54,7 @@ function TableComponent({ onRow, columns, data, meta, handlePageChange, loading,
                 rowClassName={() => 'editable-row'}
                 bordered={bordered}
                 onRow={onRow}
+                indentSize={0}
                 onChange={handlePageChange}
                 pagination={meta ? {
                     showQuickJumper: showQuickJumper,
@@ -68,9 +69,10 @@ function TableComponent({ onRow, columns, data, meta, handlePageChange, loading,
                 loading={loading}
                 dataSource={data}
                 size="small"
-                rowKey={(record) => record.id}
+                rowKey={(record) => record[rowKey]}
                 expandable={handleExpandable}
                 scroll={scroll}
+                rowSelection={rowSelection}
             />
         </Container>
 

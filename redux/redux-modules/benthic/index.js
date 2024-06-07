@@ -2,58 +2,43 @@ import { types } from "./types";
 
 const initialState = {
     data: [],
-    coordinates: [],
     selector: [],
+    meta: {},
     current: {},
     loading: false,
 };
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
-        case `${types.CREATE_REPORT}_PENDING`:
-        case `${types.FETCH_REPORTS}_PENDING`:
-        case `${types.UPDATE_REPORT}_PENDING`:
-        case `${types.DELETE_REPORT}_PENDING`:
-        case `${types.FETCH_REPORT_COORDINATES}_PENDING`:
-        case `${types.FETCH_SELECTOR_REPORTS}_PENDING`:
+        case `${types.FETCH_BENTHICS}_PENDING`:
+        case `${types.FETCH_BENTHIC_SELECTOR}_PENDING`:
+        case `${types.UPDATE_BENTHIC}_PENDING`:
+        case `${types.DELETE_BENTHIC}_PENDING`:
+        case `${types.CREATE_BENTHIC}_PENDING`:
+
             return {
                 ...state,
                 loading: true,
             };
 
-        case `${types.CREATE_REPORT}_REJECTED`:
-        case `${types.FETCH_REPORTS}_REJECTED`:
-        case `${types.UPDATE_REPORT}_REJECTED`:
-        case `${types.DELETE_REPORT}_REJECTED`:
-        case `${types.FETCH_REPORT_COORDINATES}_REJECTED`:
-        case `${types.FETCH_SELECTOR_REPORTS}_PENDING`:
+        case `${types.FETCH_BENTHICS}_REJECTED`:
+        case `${types.FETCH_BENTHIC_SELECTOR}_REJECTED`:
+        case `${types.CREATE_BENTHIC}_REJECTED`:
+        case `${types.DELETE_BENTHIC}_REJECTED`:
+        case `${types.UPDATE_BENTHIC}_REJECTED`:
             return {
                 ...state,
                 loading: false,
             };
 
-        case `${types.FETCH_SELECTOR_REPORTS}_FULFILLED`:
+        case `${types.FETCH_BENTHIC_SELECTOR}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 selector: action.payload.data.data,
             };
 
-        case `${types.FETCH_REPORT_COORDINATES}_FULFILLED`:
-            return {
-                ...state,
-                loading: false,
-                coordinates: action.payload.data,
-            };
-
-        case `${types.CREATE_REPORT}_FULFILLED`:
-            return {
-                ...state,
-                loading: false,
-                data: [action.payload.data.data, ...state.data]
-            };
-
-        case `${types.FETCH_REPORTS}_FULFILLED`:
+        case `${types.FETCH_BENTHICS}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
@@ -61,24 +46,30 @@ export default (state = initialState, action = {}) => {
                 meta: action.payload.data.meta
             };
 
-        case `${types.DELETE_REPORT}_FULFILLED`:
+        case `${types.CREATE_BENTHIC}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: [action.payload.data.data, ...state.data]
+            };
+
+        case `${types.DELETE_BENTHIC}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 data: state.data.filter(record => record.id !== action.meta.id)
             };
 
-        case `${types.UPDATE_REPORT}_FULFILLED`:
+        case `${types.UPDATE_BENTHIC}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 data: state.data.map((record) =>
-                    record.id === action.payload.data.data.id
+                    record.report_id === action.payload.data.data.report_id
                         ? action.payload.data.data
                         : record
                 )
             };
-
         default:
             return state;
     }

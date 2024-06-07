@@ -2,6 +2,13 @@ import React, { useEffect } from 'react'
 import { Col, Form, Input, Modal, Row, Select } from 'antd'
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { requiredRule } from 'src/helper';
+import RemoteCascadeContainer from '../../ProjectPage/Taxa/RemoteCascadeContainer';
+import { fetchSelectorTaxas } from '../../../../../redux/redux-modules/taxa/actions'
+import { fetchSelectorSubstrates } from '../../../../../redux/redux-modules/substrate/actions';
+
+import ReportRemoteSelectContainer from '../Report/RemoteSelectContainer';
+import SubstrateRemoteSelectContainer from '../../ProjectPage/Substrate/ExternalRemoteSelectContainer';
 
 
 const CustomModal = styled(Modal)`
@@ -10,67 +17,147 @@ const CustomModal = styled(Modal)`
     } 
 `;
 
-const requiredRule = { required: true };
-
-function FormContainer({ visible, setVisible, currentUser, updateUser }) {
+function FormContainer(props) {
+    const { current, visible, projectId } = props
     const [form] = Form.useForm();
 
-    const create = () => {
+    const handleOk = () => {
         form.validateFields().then(values => {
-            const formData = new FormData();
-            formData.append("name", values.name);
-            formData.append("email", values.email);
-            formData.append("role", values.role);
-
-            updateUser(currentUser.id, formData).then(() => {
-                handleCancel();
-            });
+            if (current.report_id) {
+                props.update(current.id, { ...values, project_id: projectId }).then(() => {
+                    handleCancel();
+                });
+            } else {
+                props.create({ ...values, project_id: projectId }).then(() => {
+                    handleCancel();
+                });
+            }
         });
-
     };
 
     const handleCancel = () => {
-        setVisible(false);
+        props.handleCancel();
         form.resetFields();
     };
 
     useEffect(() => {
-        if (currentUser) {
-            form.setFieldsValue({
-                name: currentUser.name,
-                email: currentUser.email,
-            });
-        }
+        if (visible) {
+            props.fetchSelectorSubstrates({ project_id: projectId })
+            props.fetchSelectorTaxas({ project_id: projectId })
 
+            if (current.report_id) {
+                var newBenthics = [];
+                current.children.map((benthic) => {
+
+                    newBenthics.push({ ...benthic, taxa_id: benthic?.taxa?.id ? [benthic?.taxa?.category?.id, benthic?.taxa?.id] : undefined })
+                })
+
+                form.setFieldsValue({
+                    benthics: newBenthics,
+                    report_id: current.report_id,
+
+                });
+            } else {
+                // Init p## field for 100 transects
+                a = new Array(2);
+                for (var i = 0, a = []; i < 2; a[i++] = { p: i });
+
+                form.setFieldValue('benthics', a);
+            }
+        }
     }, [visible])
+
 
 
     return (
         <CustomModal
             width={1200}
-            title="Invite member"
-            visible={visible}
+            title="Fill the benthic data"
+            open={visible}
             onCancel={handleCancel}
             centered
-            onOk={create}
+            onOk={handleOk}
         >
-
-
-            <Form style={{ margin: "50px auto" }} layout="vertical" hideRequiredMark form={form}
-            >
+            <Form style={{ margin: "50px auto" }} layout="vertical" form={form}>
                 <Row gutter={32}>
-                    <Col xs={24} md={12}>
-                        <Form.Item label="Email*" name="email" rules={[{ ...requiredRule, message: "'email' is required" }]}>
-                            <Input />
+                    <Col span={24}>
+                        <Form.Item label="Survey" name="report_id" rules={requiredRule}>
+                            <ReportRemoteSelectContainer projectId={projectId} />
                         </Form.Item>
                     </Col>
+
+                    <Col span={24}>
+                        <Form.List name="benthics">
+                            {(fields) => (
+
+                                <>
+                                    {
+                                        fields.map(({ key, name, ...restField }) => (
+                                            <Row
+                                                key={key}
+                                                gutter={16}
+                                                justify="space-between"
+                                            >
+                                                <Col span={3}>
+                                                    <Form.Item
+                                                        {...restField} label="P##" name={[name, 'p']} rules={requiredRule}>
+                                                        <Input disabled />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={7}>
+                                                    <Form.Item {...restField} label="Substrate" name={[name, 'substrate_id']} rules={requiredRule}>
+                                                        <SubstrateRemoteSelectContainer projectId={projectId} />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={8}>
+                                                    <Form.Item {...restField} label="Taxa" name={[name, 'taxa_id']} >
+                                                        <RemoteCascadeContainer projectId={projectId} />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={6}>
+                                                    <Form.Item {...restField} label="Notes" name={[name, 'notes']}>
+                                                        <Input />
+                                                    </Form.Item>
+                                                </Col>
+                                            </Row>
+
+                                        ))
+                                    }
+
+                                </>
+                            )}
+                        </Form.List>
+                    </Col>
+
+                    {/* {current.id ?
+                        
+                        : Array(100).map((benthic) => (
+                            <Col xs={24} md={12}>
+                                <Form.Item label="Email*" name="p##" rules={[{ ...requiredRule, message: "'email' is required" }]}>
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                        ))
+                    } */}
                 </Row>
             </Form>
 
 
-        </CustomModal>
+        </CustomModal >
     )
 }
 
 
-export default FormContainer;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchSelectorTaxas: (filters) => dispatch(fetchSelectorTaxas(filters)),
+        fetchSelectorSubstrates: (filters) => dispatch(fetchSelectorSubstrates(filters)),
+    };
+};
+
+
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(FormContainer);

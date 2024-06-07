@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
-import { fetchTaxas } from "../../../../../redux/redux-modules/taxa/actions";
+import { fetchTaxas, updateTaxa, deleteTaxa, createTaxa } from "../../../../../redux/redux-modules/taxa/actions";
 import { fetchIndicatorSelector } from "../../../../../redux/redux-modules/indicator/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
 
@@ -75,7 +75,7 @@ function Taxa(props) {
                     handlePageChange={handlePageChange}
                     data={data} loading={loading} meta={meta} indicators={indicators}
                     setCurrent={handleEdit}
-                    handleDelete={props.deleteLocality}
+                    handleDelete={props.deleteTaxa}
                 />
             </ContentContainer>
         </Container>
@@ -85,7 +85,10 @@ function Taxa(props) {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchTaxas: (page, filters) => dispatch(fetchTaxas(page, filters)),
-        fetchIndicatorSelector: (filters) => dispatch(fetchIndicatorSelector(filters))
+        fetchIndicatorSelector: (filters) => dispatch(fetchIndicatorSelector(filters)),
+        updateTaxa: (id, data) => dispatch(updateTaxa(id, data)),
+        createTaxa: (data) => dispatch(createTaxa(data)),
+        deleteTaxa: (id) => dispatch(deleteTaxa(id))
     };
 };
 

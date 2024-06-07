@@ -28,13 +28,16 @@ function FormContainer(props) {
 
     const handleOk = () => {
         form.validateFields().then(values => {
+            console.log(values)
+
             let initFunctions = [];
-            current.functions.map((f) => {
+            props.functions.map((f) => {
                 initFunctions.push({ function_id: f.id, value: values["function_" + f.name] });
             })
 
             var formData = {
                 ...values,
+                project_id: projectId,
                 site_id: values.site[1],
                 functions: initFunctions
             }

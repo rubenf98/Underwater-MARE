@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Popconfirm, Tag } from 'antd';
 import styled from "styled-components";
 import TableComponent from "../../Common/TableComponent";
+import RowOperation from "../../Common/RowOperation";
 
 
 const Container = styled.div`
@@ -15,47 +16,48 @@ const Container = styled.div`
     }
 `;
 
-const colorDecoder = {
-    "admin": "gold",
-    "validator": "cyan",
-}
 
-function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser, setVisible }) {
+function TableContainer({ loading, data, meta, handlePageChange, setCurrent, handleDelete }) {
 
     const columns = [
         {
-            title: '#',
-            dataIndex: 'id',
-        },
-        {
             title: 'Sample',
-            dataIndex: 'category',
+            dataIndex: 'code',
+            key: "report_id",
+            render: (code, row) => code ? code + " (#" + row.report_id + ")" : ""
         },
         {
             title: 'P##',
-            dataIndex: 'name',
+            dataIndex: 'p',
         },
         {
             title: 'Substrate',
-            dataIndex: 'genus',
+            dataIndex: 'substrate',
+            render: (report) => report?.name
+
+        },
+        {
+            title: 'Taxa cat.',
+            dataIndex: 'taxa',
+            render: (report) => report?.category?.name
+
         },
         {
             title: 'Taxa',
-            dataIndex: 'species',
-        },
-        {
-            title: 'Notes',
-            dataIndex: 'species',
+            dataIndex: 'taxa',
+            render: (taxa) => taxa?.name
         },
         {
             title: '',
             dataIndex: 'Operation',
             render: (_, record) =>
-                data.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                        <a>Remove</a>
-                    </Popconfirm>
-                ) : null,
+                record.code &&
+                <RowOperation
+                    deleteRow
+                    updateRow
+                    onUpdateClick={() => setCurrent(record)}
+                    onDeleteConfirm={() => handleDelete(record.report_id)}
+                />
         },
     ];
 
@@ -67,13 +69,8 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrentUser,
                 data={data}
                 columns={columns}
                 meta={meta}
+                rowKey="report_id"
                 handlePageChange={(aPage) => handlePageChange(aPage)}
-                onRow={(record) => ({
-                    onClick: () => {
-                        setCurrentUser(record);
-                        setVisible(true);
-                    },
-                })}
             />
         </Container>
     )

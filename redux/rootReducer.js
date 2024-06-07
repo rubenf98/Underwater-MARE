@@ -10,6 +10,8 @@ import indicator from "./redux-modules/indicator";
 import category from "./redux-modules/category";
 import depth from "./redux-modules/depth";
 import _function from "./redux-modules/function";
+import benthic from "./redux-modules/benthic";
+import substrate from "./redux-modules/substrate";
 
 const rootReducer = combineReducers({
     auth,
@@ -22,7 +24,9 @@ const rootReducer = combineReducers({
     indicator,
     category,
     depth,
-    _function
+    _function,
+    benthic,
+    substrate
 });
 
 export default rootReducer;

@@ -29,7 +29,7 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrent, han
             title: '#',
             dataIndex: 'id',
             fixed: 'left',
-            width: 50,
+            width: 80,
         },
         {
             title: 'Sample',

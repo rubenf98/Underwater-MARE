@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { handleArrayToFormData, requiredRule } from 'src/helper';
 import RemoteCascadeContainer from '../../ProjectPage/Site/RemoteCascadeContainer';
-import RemoteSelectContainer from '../Depth/RemoteSelectContainer';
+import RemoteSelectContainer from '../../ProjectPage/Depth/RemoteSelectContainer';
 import debounce from 'debounce';
 import { Map, Marker } from 'react-map-gl';
 import moment from 'moment';

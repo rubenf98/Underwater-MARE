@@ -16,6 +16,7 @@ export default (state = initialState, action = {}) => {
         case `${types.INVITE_MEMBER}_PENDING`:
         case `${types.FETCH_PROJECT_INVITES}_PENDING`:
         case `${types.FETCH_PROJECT_STATISTICS}_PENDING`:
+        case `${types.FETCH_PROJECTS}_PENDING`:
         case `${types.RESPOND_TO_INVITE}_PENDING`:
             return {
                 ...state,
@@ -27,10 +28,18 @@ export default (state = initialState, action = {}) => {
         case `${types.INVITE_MEMBER}_REJECTED`:
         case `${types.FETCH_PROJECT_INVITES}_REJECTED`:
         case `${types.FETCH_PROJECT_STATISTICS}_REJECTED`:
-        case `${types.RESPOND_TO_INVITE}_PENDING`:
+        case `${types.FETCH_PROJECTS}_REJECTED`:
+        case `${types.RESPOND_TO_INVITE}_REJECTED`:
             return {
                 ...state,
                 loading: false,
+            };
+
+        case `${types.FETCH_PROJECTS}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: action.payload.data.data,
             };
 
         case `${types.RESPOND_TO_INVITE}_FULFILLED`:

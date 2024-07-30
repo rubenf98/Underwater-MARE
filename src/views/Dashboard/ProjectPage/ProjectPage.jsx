@@ -7,6 +7,8 @@ import { Col, Row } from 'antd';
 import Taxa from './Taxa/Taxa';
 import { useParams } from 'react-router-dom';
 import Indicator from './Indicator/Indicator';
+import Depth from './Depth/Depth';
+import Function from './Function/Function';
 
 const Container = styled.section`
     width: 100%;
@@ -36,8 +38,16 @@ function ProjectPage() {
             <Row>
                 <Taxa projectId={id} />
             </Row>
-            <Row>
-                <Indicator projectId={id} />
+            <Row gutter={64}>
+                <Col md={24} lg={8}>
+                    <Indicator projectId={id} />
+                </Col>
+                <Col md={24} lg={8}>
+                    <Depth projectId={id} />
+                </Col>
+                <Col md={24} lg={8}>
+                    <Function projectId={id} />
+                </Col>
             </Row>
         </Container>
     )

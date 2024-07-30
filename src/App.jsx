@@ -10,6 +10,7 @@ import Register from "./views/Register/Register";
 import ProjectPage from "./views/Dashboard/ProjectPage/ProjectPage";
 import ReportPage from "./views/Dashboard/ReportPage/ReportPage";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import ProjectList from "./views/Dashboard/ProjectList/ProjectList";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <div className="mainContent">
                     <Routes>
                         <Route path="/login" element={<Login />} />
+
                         <Route path="/register" element={<Register />} />
                         <Route
                             path="/dashboard"
@@ -45,6 +47,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <ReportPage />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/dashboard/projects"
+                            element={
+                                <PrivateRoute>
+                                    <ProjectList />
                                 </PrivateRoute>
                             }
                         />

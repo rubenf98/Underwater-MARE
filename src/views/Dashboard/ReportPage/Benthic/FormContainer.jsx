@@ -60,7 +60,7 @@ function FormContainer(props) {
             } else {
                 // Init p## field for 100 transects
                 a = new Array(2);
-                for (var i = 0, a = []; i < 2; a[i++] = { p: i });
+                for (var i = 0, a = []; i < 20; a[i++] = { p: i });
 
                 form.setFieldValue('benthics', a);
             }

@@ -1,5 +1,6 @@
 import { types } from "./types";
 import axios from "axios";
+import queryString from "query-string";
 
 const url = `${import.meta.env.VITE_API}/api/underwater-survey`;
 
@@ -12,6 +13,13 @@ export const fetchSelfProjects = () => ({
 export const fetchProjectStatistics = (id) => ({
     type: types.FETCH_PROJECT_STATISTICS,
     payload: axios.get(`${url}/project-statistics/${id}`),
+});
+
+export const fetchProjects = (filters = {}) => ({
+    type: types.FETCH_PROJECTS,
+    payload: axios.get(`${url}/projects?${queryString.stringify(filters, {
+        arrayFormat: "index"
+    })}`)
 });
 
 export const createProject = (data) => ({

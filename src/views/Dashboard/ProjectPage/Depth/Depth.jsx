@@ -4,9 +4,7 @@ import { connect } from "react-redux";
 import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
-import { fetchMotiles, createMotile, updateMotile, deleteMotile } from "../../../../../redux/redux-modules/motile/actions";
-import { fetchSelectorTaxas } from "../../../../../redux/redux-modules/taxa/actions";
-
+import { fetchDepths, createDepth, updateDepth, deleteDepth } from "../../../../../redux/redux-modules/depth/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
 
 const ContentContainer = styled.div`
@@ -14,15 +12,13 @@ const ContentContainer = styled.div`
     margin: auto;
 `;
 
-const Container = styled.div`
+const Container = styled.section`
     width: 100%;
     box-sizing: border-box;
     
 `;
 
-
-
-function Motile(props) {
+function Depth(props) {
     const { data, loading, meta, projectId } = props;
 
     const [filters, setFilters] = useState({ project: projectId });
@@ -30,16 +26,11 @@ function Motile(props) {
     const [current, setCurrent] = useState({})
 
     useEffect(() => {
-        props.fetchMotiles(1, filters)
-
+        props.fetchDepths(1, filters);
     }, [filters])
-    useEffect(() => {
-        props.fetchSelectorTaxas({ project_id: projectId })
-    }, [])
-
 
     function handlePageChange(pagination) {
-        props.fetchMotiles(pagination.current, filters);
+        props.fetchDepths(pagination.current, filters);
     }
 
     const handleCancel = () => {
@@ -55,28 +46,28 @@ function Motile(props) {
     return (
         <Container>
             <TitleAddSection
-                title="Motile(s)"
+                title="Depth(s)"
                 handleClick={() => setVisible(true)}
             />
 
-            <ContentContainer>
 
+            <ContentContainer>
                 <FormContainer
                     visible={visible}
                     handleCancel={handleCancel}
                     current={current}
-                    create={props.createMotile}
-                    update={props.updateMotile}
+                    create={props.createDepth}
+                    update={props.updateDepth}
                     projectId={projectId}
                 />
                 <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by name or email" />
+                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by depth" />
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}
                     data={data} loading={loading} meta={meta}
                     setCurrent={handleEdit}
-                    handleDelete={props.deleteMotile}
+                    handleDelete={props.deleteDepth}
                 />
             </ContentContainer>
         </Container>
@@ -85,20 +76,20 @@ function Motile(props) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchMotiles: (page, filters) => dispatch(fetchMotiles(page, filters)),
-        updateMotile: (id, data) => dispatch(updateMotile(id, data)),
-        createMotile: (data) => dispatch(createMotile(data)),
-        deleteMotile: (id) => dispatch(deleteMotile(id)),
-        fetchSelectorTaxas: () => dispatch(fetchSelectorTaxas())
+        fetchDepths: (page, filters) => dispatch(fetchDepths(page, filters)),
+        updateDepth: (id, data) => dispatch(updateDepth(id, data)),
+        createDepth: (data) => dispatch(createDepth(data)),
+        deleteDepth: (id) => dispatch(deleteDepth(id))
+
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.motile.loading,
-        data: state.motile.data,
-        meta: state.motile.meta
+        loading: state.depth.loading,
+        data: state.depth.data,
+        meta: state.depth.meta
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Motile);
+export default connect(mapStateToProps, mapDispatchToProps)(Depth);

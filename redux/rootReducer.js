@@ -12,6 +12,7 @@ import depth from "./redux-modules/depth";
 import _function from "./redux-modules/function";
 import benthic from "./redux-modules/benthic";
 import substrate from "./redux-modules/substrate";
+import motile from "./redux-modules/motile";
 
 const rootReducer = combineReducers({
     auth,
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
     depth,
     _function,
     benthic,
-    substrate
+    substrate,
+    motile
 });
 
 export default rootReducer;

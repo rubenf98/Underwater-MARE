@@ -1,12 +1,17 @@
-import { Col, Input, Row } from 'antd'
-import React, { useState, useEffect } from 'react'
-import { fetchSelectorFunctions } from '../../../../../redux/redux-modules/function/actions';
-import TableContainer from './TableContainer';
-import { fetchReports, createReport, updateReport, deleteReport } from '../../../../../redux/redux-modules/report/actions';
-import { connect } from 'react-redux';
+import { Col, Input, Row } from "antd";
+import React, { useState, useEffect } from "react";
+import { fetchSelectorFunctions } from "../../../../../redux/redux-modules/function/actions";
+import TableContainer from "./TableContainer";
+import {
+    fetchReports,
+    createReport,
+    updateReport,
+    deleteReport,
+} from "../../../../../redux/redux-modules/report/actions";
+import { connect } from "react-redux";
 import styled from "styled-components";
-import TitleAddSection from '../../Common/TitleAddSection';
-import FormContainer from './FormContainer';
+import TitleAddSection from "../../Common/TitleAddSection";
+import FormContainer from "./FormContainer";
 
 const Container = styled.div`
     width: 100%;
@@ -19,19 +24,16 @@ const ContentContainer = styled.div`
     margin: auto;
 `;
 
-
 function Report(props) {
-    ;
-
     const { data, loading, meta, projectId } = props;
     const [filters, setFilters] = useState({ project: projectId });
-    const [visible, setVisible] = useState(false)
-    const [current, setCurrent] = useState({})
+    const [visible, setVisible] = useState(false);
+    const [current, setCurrent] = useState({});
 
     useEffect(() => {
         props.fetchReports(1, filters);
         props.fetchSelectorFunctions(filters);
-    }, [filters])
+    }, [filters]);
 
     function handlePageChange(pagination) {
         props.fetchReports(pagination.current, filters);
@@ -39,17 +41,22 @@ function Report(props) {
 
     const handleCancel = () => {
         setCurrent({});
-        setVisible(false)
-    }
+        setVisible(false);
+    };
 
     const handleEdit = (aCurrent) => {
         setCurrent(aCurrent);
-        setVisible(true)
-    }
+        setVisible(true);
+    };
+
+    console.log(data);
 
     return (
         <Container>
-            <TitleAddSection title="Survey(s)" handleClick={() => setVisible(true)} />
+            <TitleAddSection
+                title="Survey(s)"
+                handleClick={() => setVisible(true)}
+            />
 
             <ContentContainer>
                 <FormContainer
@@ -61,18 +68,24 @@ function Report(props) {
                     projectId={projectId}
                 />
                 <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by locality or site" />
+                    <Input.Search
+                        onSearch={(e) => setFilters({ search: e })}
+                        size="large"
+                        type="search"
+                        placeholder="Search by locality or site"
+                    />
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}
-                    data={data} loading={loading} meta={meta}
+                    data={data}
+                    loading={loading}
+                    meta={meta}
                     setCurrent={handleEdit}
                     handleDelete={props.deleteReport}
                 />
             </ContentContainer>
-
         </Container>
-    )
+    );
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -81,7 +94,8 @@ const mapDispatchToProps = (dispatch) => {
         updateReport: (id, data) => dispatch(updateReport(id, data)),
         createReport: (data) => dispatch(createReport(data)),
         deleteReport: (id) => dispatch(deleteReport(id)),
-        fetchSelectorFunctions: (filters) => dispatch(fetchSelectorFunctions(filters)),
+        fetchSelectorFunctions: (filters) =>
+            dispatch(fetchSelectorFunctions(filters)),
     };
 };
 

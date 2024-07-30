@@ -4,7 +4,11 @@ import { connect } from "react-redux";
 import TableContainer from "./TableContainer";
 import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
-import { fetchSelfProjects, createProject, updateProject } from "../../../../../redux/redux-modules/project/actions";
+import {
+    fetchSelfProjects,
+    createProject,
+    updateProject,
+} from "../../../../../redux/redux-modules/project/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
 import { Link } from "react-router-dom";
 
@@ -16,16 +20,14 @@ const ContentContainer = styled.div`
 const Container = styled.section`
     width: 100%;
     box-sizing: border-box;
-    
 `;
-
 
 const ProjectContainer = styled.div`
     width: 100%;
     padding: 20px 30px;
     box-sizing: border-box;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px 2px rgba(0,0,0,.1);
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
 
     .team {
@@ -52,7 +54,7 @@ const ProjectContainer = styled.div`
         }
 
         .role {
-            opacity: .5;
+            opacity: 0.5;
         }
     }
 
@@ -69,7 +71,7 @@ const ProjectContainer = styled.div`
 
             button {
                 cursor: pointer;
-                background-color: #0C4C88;
+                background-color: #0c4c88;
                 padding: 8px;
                 box-sizing: border-box;
                 border: 0px;
@@ -81,25 +83,21 @@ const ProjectContainer = styled.div`
                 }
             }
         }
-
-        
-        
     }
 `;
-
 
 function Project(props) {
     const { projects } = props;
 
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         props.fetchSelfProjects();
-    }, [])
+    }, []);
 
     const handleCancel = () => {
-        setVisible(false)
-    }
+        setVisible(false);
+    };
 
     return (
         <Container>
@@ -116,27 +114,54 @@ function Project(props) {
                     handleClick={() => setVisible(true)}
                 />
 
-                {projects.map((project) => (
-                    <ProjectContainer>
-                        <div className='header'>
+                {projects.map((project, i) => (
+                    <ProjectContainer key={i}>
+                        <div className="header">
                             <h3>{project.name}</h3>
 
-                            <div className='links-container'>
-                                <Link to={"/dashboard/reports/" + project.id}> <button><img src="/assets/icons/edit.svg" alt="" /></button></Link>
-                                <Link to={"/dashboard/projects/" + project.id}> <button><img src="/assets/icons/link.svg" alt="" /></button></Link>
-
+                            <div className="links-container">
+                                <Link
+                                    to={
+                                        "/dashboard/project/" +
+                                        project.id +
+                                        "/reports"
+                                    }
+                                >
+                                    {" "}
+                                    <button>
+                                        <img
+                                            src="/assets/icons/edit.svg"
+                                            alt=""
+                                        />
+                                    </button>
+                                </Link>
+                                <Link to={"/dashboard/projects/" + project.id}>
+                                    {" "}
+                                    <button>
+                                        <img
+                                            src="/assets/icons/link.svg"
+                                            alt=""
+                                        />
+                                    </button>
+                                </Link>
                             </div>
-
-
                         </div>
                         <p>{project.description}</p>
 
-                        <div className='team'>
+                        <div className="team">
                             {project.users.map((member) => (
-                                <div key={member.id} className='team-member'>
-                                    <img src={"https://wave-labs.org/" + member.photo} alt="profile picture" />
-                                    <div className='details'>
-                                        <p className='name'>{member.userable.user.name}</p>
+                                <div key={member.id} className="team-member">
+                                    <img
+                                        src={
+                                            "https://wave-labs.org/" +
+                                            member.photo
+                                        }
+                                        alt="profile picture"
+                                    />
+                                    <div className="details">
+                                        <p className="name">
+                                            {member.userable.user.name}
+                                        </p>
                                         {/* <p className='role'>{member.role}</p> */}
                                     </div>
                                 </div>
@@ -144,10 +169,9 @@ function Project(props) {
                         </div>
                     </ProjectContainer>
                 ))}
-
             </ContentContainer>
         </Container>
-    )
+    );
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -162,7 +186,7 @@ const mapStateToProps = (state) => {
     return {
         loading: state.project.loading,
         user: state.auth.user,
-        projects: state.project.selfData
+        projects: state.project.selfData,
     };
 };
 

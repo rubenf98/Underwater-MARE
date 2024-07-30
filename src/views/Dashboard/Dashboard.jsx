@@ -103,6 +103,7 @@ const mapDispatchToProps = (dispatch) => {
 
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return {
         user: state.auth.user,
         projects: state.project.selfData,

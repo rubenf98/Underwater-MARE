@@ -49,8 +49,6 @@ function Report(props) {
         setVisible(true);
     };
 
-    console.log(data);
-
     return (
         <Container>
             <TitleAddSection

@@ -1,35 +1,44 @@
-import { Modal, Upload } from "antd";
+import { Button, Modal, Upload } from "antd";
 import { connect } from "react-redux";
 import { updateTaxa } from "../../../../../redux/redux-modules/taxa/actions";
+import { UploadOutlined } from "@ant-design/icons";
 
 function AddImageToNewTaxaModal(props) {
-    const { open, setOpen } = props;
+  const { open, setOpen } = props;
 
-    console.log(open);
+  console.log(open);
 
-    const submitPhoto = () => {};
+  const submitPhoto = () => {};
 
-    const handleSkip = () => {
-        setOpen(false);
-    };
+  const handleSkip = () => {
+    setOpen(false);
+  };
 
-    return (
-        <Modal 
-            open={open}
-            onOk={submitPhoto}
-            onCancel={handleSkip}
-            cancelText={"Submit Later"}
-            okText="Submit"
-        >
-            <Upload />
-        </Modal>
-    );
+  return (
+    <Modal
+      title="Modal"
+      open={open}
+      onOk={submitPhoto}
+      onCancel={handleSkip}
+      cancelText={"Submit Later"}
+      okText="Submit"
+    >
+      <p>teste</p>
+      <p>teste</p>
+      <p>teste</p>
+      <p>teste</p>
+      <p>teste</p>
+      <Upload>
+        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+      </Upload>
+    </Modal>
+  );
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        createTaxa: (data) => dispatch(updateTaxa(data)),
-    };
+  return {
+    createTaxa: (data) => dispatch(updateTaxa(data)),
+  };
 };
 
 export default connect(null, mapDispatchToProps)(AddImageToNewTaxaModal);

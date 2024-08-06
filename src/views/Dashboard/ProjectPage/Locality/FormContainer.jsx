@@ -8,7 +8,7 @@ import { handleArrayToFormData } from 'src/helper';
 const CustomModal = styled(Modal)`
     .ant-modal-body {
         padding: 30px 60px;
-    } 
+    }
 `;
 
 const requiredRule = { required: true };

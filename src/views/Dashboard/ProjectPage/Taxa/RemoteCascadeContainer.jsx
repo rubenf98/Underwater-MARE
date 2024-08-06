@@ -20,7 +20,7 @@ import styled from "styled-components";
 
 function RemoteCascadeContainer(props) {
     const [openCascader, setOpenCascader] = useState(false);
-    const [openPhotoUpload, setOpenPhotoUpload] = useState(false);
+    const [photoUploadTaxaId, setPhotoUploadTaxaId] = useState(false);
     const [newTaxaName, setNewTaxaName] = useState();
     const [createTaxaError, setCreateTaxaError] = useState();
     const [newTaxaCategoryId, setNewTaxaCategoryId] = useState(1);
@@ -114,7 +114,7 @@ function RemoteCascadeContainer(props) {
                                             setOpenCascader(false);
 
                                             //Open popup to insert photo
-                                            setOpenPhotoUpload(true);
+                                            setPhotoUploadTaxaId(res?.value?.data?.data?.id);
                                         } catch (err) {
                                             setCreateTaxaError(err);
                                         }
@@ -126,8 +126,8 @@ function RemoteCascadeContainer(props) {
                 }}
             />
             <AddImageToNewTaxaModal
-                open={openPhotoUpload}
-                setOpen={setOpenPhotoUpload}
+                taxaId={photoUploadTaxaId}
+                setTaxaId={setPhotoUploadTaxaId}
             />
         </>
     );

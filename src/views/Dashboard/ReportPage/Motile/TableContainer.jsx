@@ -7,7 +7,7 @@ import RowOperation from "../../Common/RowOperation";
 
 const Container = styled.div`
     width: 100%;
-    
+
 .editable-row {
     cursor: pointer;
 }
@@ -91,7 +91,7 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrent, han
             width: 150,
         },
         {
-            title: 'Surveyed area',
+            title: 'Survey metadata',
             dataIndex: 'surveyed_area',
             width: 150,
         },

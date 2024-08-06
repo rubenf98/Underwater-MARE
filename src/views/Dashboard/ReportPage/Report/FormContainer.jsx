@@ -1,310 +1,358 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd'
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+  Space,
+} from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { handleArrayToFormData, requiredRule } from 'src/helper';
-import RemoteCascadeContainer from '../../ProjectPage/Site/RemoteCascadeContainer';
-import RemoteSelectContainer from '../../ProjectPage/Depth/RemoteSelectContainer';
-import debounce from 'debounce';
-import { Map, Marker } from 'react-map-gl';
-import moment from 'moment';
-
+import { handleArrayToFormData, requiredRule } from "src/helper";
+import RemoteCascadeContainer from "../../ProjectPage/Site/RemoteCascadeContainer";
+import RemoteSelectContainer from "../../ProjectPage/Depth/RemoteSelectContainer";
+import debounce from "debounce";
+import { Map, Marker } from "react-map-gl";
+import moment from "moment";
 
 const CustomModal = styled(Modal)`
-    .ant-modal-body {
-        padding: 30px 60px;
-    } 
+  .ant-modal-body {
+    padding: 30px 60px;
+  }
 `;
 
 function FormContainer(props) {
-    const [form] = Form.useForm();
-    const [sample, setSample] = useState([undefined, undefined, undefined, undefined, undefined])
+  const [form] = Form.useForm();
+  const [sample, setSample] = useState([
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  ]);
 
-    const [latitude, setLatitude] = useState(32.606889622);
-    const [longitude, setLongitude] = useState(-16.8109375);
-    const [hasTouched, setHasTouched] = useState([false, false]);
+  const [latitude, setLatitude] = useState(32.606889622);
+  const [longitude, setLongitude] = useState(-16.8109375);
+  const [hasTouched, setHasTouched] = useState([false, false]);
 
-    const { current, visible, projectId } = props
+  const { current, visible, projectId } = props;
 
-    const handleOk = () => {
-        form.validateFields().then(values => {
-            console.log(values)
+  const handleOk = () => {
+    form.validateFields().then((values) => {
 
-            let initFunctions = [];
-            props.functions.map((f) => {
-                initFunctions.push({ function_id: f.id, value: values["function_" + f.name] });
-            })
-
-            var formData = {
-                ...values,
-                project_id: projectId,
-                site_id: values.site[1],
-                functions: initFunctions
-            }
-
-            if (current.id) {
-                props.update(current.id, formData).then(() => {
-                    handleCancel();
-                });
-            } else {
-                props.create(formData).then(() => {
-                    handleCancel();
-                });
-            }
+      let initFunctions = [];
+      props.functions.map((f) => {
+        initFunctions.push({
+          function_id: f.id,
+          value: values["function_" + f.name],
         });
-    };
+      });
 
-    const handleCancel = () => {
-        props.handleCancel();
-        form.resetFields();
-    };
+      var formData = {
+        ...values,
+        project_id: projectId,
+        site_id: values.site[1],
+        functions: initFunctions,
+      };
 
-    useEffect(() => {
-        let isReady = true;
-        let string = "";
-        sample.map((field, index) => {
-            field == undefined && (isReady = false)
-            string = string + field;
-            if (index != sample.length - 1) {
-                string = string + "_"
-            }
-        })
+      if (current.id) {
+        props.update(current.id, formData).then(() => {
+          handleCancel();
+        });
+      } else {
+        props.create(formData).then(() => {
+          handleCancel();
+        });
+      }
+    });
+  };
 
-        if (isReady) {
-            form.setFieldValue('code', string);
-        }
-    }, [sample])
+  const handleCancel = () => {
+    props.handleCancel();
+    form.resetFields();
+  };
 
+  useEffect(() => {
+    let isReady = true;
+    let string = "";
+    sample.map((field, index) => {
+      field == undefined && (isReady = false);
+      string = string + field;
+      if (index != sample.length - 1) {
+        string = string + "_";
+      }
+    });
 
-    useEffect(() => {
-        if (current.id) {
-            console.log(current.date)
-            let initFunctions = {};
-            current.functions.map((f) => {
-                initFunctions["function_" + f.name] = f.pivot.user
-            })
-
-            form.setFieldsValue({
-                date: moment(current.date),
-                code: current.code,
-                site: [current.site.locality.id, current.site.id],
-                depth_id: current.depth.id,
-                heading: current.heading,
-                heading_direction: current.heading_direction,
-                site_area: current.site_area,
-                distance: current.distance,
-                daily_dive: current.daily_dive,
-                transect: current.transect,
-                time: current.time,
-                replica: current.replica,
-
-                ...initFunctions
-            });
-
-            handleDrag({ lngLat: { lat: current.latitude, lng: current.longitude } })
-        }
-
-    }, [visible])
-
-    const handleLatitude = (e) => {
-        if (e.target.value < 90 && e.target.value > -90) {
-            setLatitude(e.target.value);
-            setHasTouched([true, hasTouched[1]]);
-        }
-
+    if (isReady) {
+      form.setFieldValue("code", string);
     }
-    const handleLongitude = (e) => {
-        setLongitude(e.target.value);
-        setHasTouched([hasTouched[0], true]);
+  }, [sample]);
+
+  useEffect(() => {
+    if (current.id) {
+      let initFunctions = {};
+      current.functions.map((f) => {
+        initFunctions["function_" + f.name] = f.pivot.user;
+      });
+
+      form.setFieldsValue({
+        date: moment(current.date),
+        code: current.code,
+        site: [current.site.locality.id, current.site.id],
+        depth_id: current.depth.id,
+        heading: current.heading,
+        heading_direction: current.heading_direction,
+        site_area: current.site_area,
+        distance: current.distance,
+        daily_dive: current.daily_dive,
+        transect: current.transect,
+        time: current.time,
+        replica: current.replica,
+
+        ...initFunctions,
+      });
+
+      handleDrag({ lngLat: { lat: current.latitude, lng: current.longitude } });
     }
+  }, [visible]);
 
-    const handleDrag = (e) => {
-        setLatitude(e.lngLat.lat);
-        setLongitude(e.lngLat.lng);
-        setHasTouched([true, true]);
-
-        form.setFieldsValue({ latitude: e.lngLat.lat, longitude: e.lngLat.lng })
+  const handleLatitude = (e) => {
+    if (e.target.value < 90 && e.target.value > -90) {
+      setLatitude(e.target.value);
+      setHasTouched([true, hasTouched[1]]);
     }
+  };
+  const handleLongitude = (e) => {
+    setLongitude(e.target.value);
+    setHasTouched([hasTouched[0], true]);
+  };
 
-    const handleSiteAndLocality = (e) => {
-        const locality = props.localities.find((element) => element.id == e[0]);
-        const site = locality.sites.find((element) => element.id == e[1]);
+  const handleDrag = (e) => {
+    setLatitude(e.lngLat.lat);
+    setLongitude(e.lngLat.lng);
+    setHasTouched([true, true]);
 
-        let newSample = [...sample];
-        newSample[0] = locality.code;
-        newSample[1] = site.code;
+    form.setFieldsValue({ latitude: e.lngLat.lat, longitude: e.lngLat.lng });
+  };
 
-        setSample(newSample);
-    }
+  const handleSiteAndLocality = (e) => {
+    const locality = props.localities.find((element) => element.id == e[0]);
+    const site = locality.sites.find((element) => element.id == e[1]);
 
-    const handleDepth = (e) => {
-        const depth = props.depths.find((element) => element.id == e);
+    let newSample = [...sample];
+    newSample[0] = locality.code;
+    newSample[1] = site.code;
 
-        handleSampleChange("D" + depth.id, 3)
-    }
+    setSample(newSample);
+  };
 
-    const handleSampleChange = (value, index) => {
+  const handleDepth = (e) => {
+    const depth = props.depths.find((element) => element.id == e);
 
-        let newSample = [...sample];
-        newSample[index] = value;
+    handleSampleChange("D" + depth.id, 3);
+  };
 
-        setSample(newSample);
-    }
+  const handleSampleChange = (value, index) => {
+    let newSample = [...sample];
+    newSample[index] = value;
 
-    return (
-        <CustomModal
-            width={1280}
-            title="Create surveys"
-            open={visible}
-            onCancel={handleCancel}
-            centered
-            onOk={handleOk}
-        >
+    setSample(newSample);
+  };
 
+  return (
+    <CustomModal
+      width={1280}
+      title="Create surveys"
+      open={visible}
+      onCancel={handleCancel}
+      centered
+      onOk={handleOk}
+    >
+      <Form
+        style={{ margin: "30px auto" }}
+        layout="vertical"
+        requiredMark
+        form={form}
+      >
+        <Row gutter={16}>
+          <Col xs={24} md={6}>
+            <Form.Item label="Sample" name="code" rules={requiredRule}>
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={6}>
+            <Form.Item label="Date" name="date" rules={requiredRule}>
+              <DatePicker style={{ width: "100%" }} />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={6}>
+            <Form.Item
+              label="Site and locality"
+              name="site"
+              rules={requiredRule}
+            >
+              <RemoteCascadeContainer
+                onChange={handleSiteAndLocality}
+                projectId={projectId}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={6}>
+            <Form.Item label="Depth" name="depth_id" rules={requiredRule}>
+              <RemoteSelectContainer
+                onChange={handleDepth}
+                projectId={projectId}
+              />
+            </Form.Item>
+          </Col>
 
-            <Form style={{ margin: "30px auto" }} layout="vertical" requiredMark form={form}>
-                <Row gutter={16}>
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Sample" name="code" rules={requiredRule}>
-                            <Input disabled />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Date" name="date" rules={requiredRule}>
-                            <DatePicker style={{ width: "100%" }} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Site and locality" name="site" rules={requiredRule}>
-                            <RemoteCascadeContainer onChange={handleSiteAndLocality} projectId={projectId} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Depth" name="depth_id" rules={requiredRule}>
-                            <RemoteSelectContainer onChange={handleDepth} projectId={projectId} />
-                        </Form.Item>
-                    </Col>
+          <Col xs={24} md={6}>
+            <Form.Item label="Heading" name="heading">
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={6}>
+            <Form.Item label="Heading direction" name="heading_direction">
+              <Input />
+            </Form.Item>
+          </Col>
 
+          <Col xs={24} md={6}>
+            <Form.Item label="Site area" name="site_area">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={6}>
+            <Form.Item label="Distance" name="distance">
+              <Input />
+            </Form.Item>
+          </Col>
 
+          <Col xs={12} md={6}>
+            <Form.Item
+              label="Daily dive#"
+              name="daily_dive"
+              rules={requiredRule}
+            >
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+          </Col>
+          <Col xs={12} md={6}>
+            <Form.Item label="Transect#" name="transect" rules={requiredRule}>
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+          </Col>
+          <Col xs={12} md={6}>
+            <Form.Item label="Time#" name="time" rules={requiredRule}>
+              <InputNumber
+                onChange={(e) => handleSampleChange("Time" + e, 2)}
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={12} md={6}>
+            <Form.Item label="Replica#" name="replica" rules={requiredRule}>
+              <InputNumber
+                onChange={(e) => handleSampleChange("R" + e, 4)}
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </Col>
 
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Heading" name="heading">
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Heading direction" name="heading_direction">
-                            <Input />
-                        </Form.Item>
-                    </Col>
-
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Site area" name="site_area">
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={6}>
-                        <Form.Item label="Distance" name="distance">
-                            <Input />
-                        </Form.Item>
-                    </Col>
-
-                    <Col xs={12} md={6}>
-                        <Form.Item label="Daily dive#" name="daily_dive" rules={requiredRule}>
-                            <InputNumber style={{ width: "100%" }} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <Form.Item label="Transect#" name="transect" rules={requiredRule}>
-                            <InputNumber style={{ width: "100%" }} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <Form.Item label="Time#" name="time" rules={requiredRule}>
-                            <InputNumber
-                                onChange={e => handleSampleChange("Time" + e, 2)}
-                                style={{ width: "100%" }}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <Form.Item label="Replica#" name="replica" rules={requiredRule}>
-                            <InputNumber
-                                onChange={e => handleSampleChange("R" + e, 4)}
-                                style={{ width: "100%" }}
-                            />
-                        </Form.Item>
-                    </Col>
-
-                    <Col span={24}>
-                        <h3>Dive team functions</h3>
-                        <Row gutter={16}>
-                            {props.functions.map((f) => (
-                                <Col key={f.id} xs={12} md={6}>
-                                    <Form.Item label={f.name} name={"function_" + f.name} rules={requiredRule}>
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                            ))}
-
-                        </Row>
-                    </Col>
-                    <Col span={24}>
-                        <Row style={{ marginTop: "30px" }} align='middle' type="flex" gutter={32}>
-                            <Col xs={24} md={12}>
-                                <h3>Introduce coordinates using the inputs below or move the picker on the map to the desired position.</h3>
-                                <Form.Item label="Latitude*" name="latitude" rules={requiredRule}>
-                                    <Input onChange={debounce(handleLatitude, 600)} placeholder="Latitude" />
-                                </Form.Item>
-                                <Form.Item label="Longitude*" name="longitude" rules={requiredRule}>
-                                    <Input onChange={debounce(handleLongitude, 600)} placeholder="Longitude" />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={12}>
-                                <Map
-                                    mapboxAccessToken="pk.eyJ1IjoidGlnZXJ3aGFsZSIsImEiOiJjanBncmNscnAwMWx3M3ZxdDF2cW8xYWZvIn0.LVgciVtYclOed_hZ9oXY2g"
-                                    initialViewState={{
-                                        latitude: latitude,
-                                        longitude: longitude,
-                                        zoom: 7,
-                                    }}
-                                    style={{
-                                        height: "350px",
-                                        width: "100%",
-                                    }}
-
-                                    mapStyle="mapbox://styles/tigerwhale/cjpgrt1sccjs92sqjfnuixnxc"
-                                >
-                                    {(!isNaN(latitude) && !isNaN(longitude)) &&
-                                        <Marker
-                                            draggable
-                                            latitude={latitude}
-                                            color="red"
-                                            longitude={longitude}
-                                            onDragEnd={handleDrag}
-                                        />
-                                    }
-                                </Map>
-
-                            </Col>
-                        </Row>
-                    </Col>
-
-                </Row>
-            </Form >
-
-
-        </CustomModal >
-    )
+          <Col span={24}>
+            <h3>Dive team functions</h3>
+            <Row gutter={16}>
+              {props.functions.map((f) => (
+                <Col key={f.id} xs={12} md={6}>
+                  <Form.Item
+                    label={f.name}
+                    name={"function_" + f.name}
+                    rules={requiredRule}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+              ))}
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row
+              style={{ marginTop: "30px" }}
+              align="middle"
+              type="flex"
+              gutter={32}
+            >
+              <Col xs={24} md={12}>
+                <h3>
+                  Introduce coordinates using the inputs below or move the
+                  picker on the map to the desired position.
+                </h3>
+                <Form.Item
+                  label="Latitude*"
+                  name="latitude"
+                  rules={requiredRule}
+                >
+                  <Input
+                    onChange={debounce(handleLatitude, 600)}
+                    placeholder="Latitude"
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Longitude*"
+                  name="longitude"
+                  rules={requiredRule}
+                >
+                  <Input
+                    onChange={debounce(handleLongitude, 600)}
+                    placeholder="Longitude"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Map
+                  mapboxAccessToken="pk.eyJ1IjoidGlnZXJ3aGFsZSIsImEiOiJjanBncmNscnAwMWx3M3ZxdDF2cW8xYWZvIn0.LVgciVtYclOed_hZ9oXY2g"
+                  initialViewState={{
+                    latitude: latitude,
+                    longitude: longitude,
+                    zoom: 7,
+                  }}
+                  style={{
+                    height: "350px",
+                    width: "100%",
+                  }}
+                  mapStyle="mapbox://styles/tigerwhale/cjpgrt1sccjs92sqjfnuixnxc"
+                >
+                  {!isNaN(latitude) && !isNaN(longitude) && (
+                    <Marker
+                      draggable
+                      latitude={latitude}
+                      color="red"
+                      longitude={longitude}
+                      onDragEnd={handleDrag}
+                    />
+                  )}
+                </Map>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </CustomModal>
+  );
 }
 
 const mapStateToProps = (state) => {
-    return {
-        loading: state.report.loading,
-        localities: state.locality.selector,
-        depths: state.depth.selector,
-        functions: state._function.selector,
-    };
+  return {
+    loading: state.report.loading,
+    localities: state.locality.selector,
+    depths: state.depth.selector,
+    functions: state._function.selector,
+  };
 };
 
 export default connect(mapStateToProps, null)(FormContainer);

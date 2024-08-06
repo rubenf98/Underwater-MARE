@@ -8,7 +8,7 @@ import { Children } from "react";
 
 const Container = styled.div`
     width: 100%;
-    
+
 .editable-row {
     cursor: pointer;
 }

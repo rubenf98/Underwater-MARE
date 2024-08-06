@@ -34,7 +34,7 @@ const UserDataContainer = styled.div`
 const Notification = styled.div`
     border-bottom: 1px solid #c4c4c4;
     padding-bottom: 20px;
-    
+
     p {
         margin: 0px;
     }
@@ -103,7 +103,6 @@ const mapDispatchToProps = (dispatch) => {
 
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         user: state.auth.user,
         projects: state.project.selfData,

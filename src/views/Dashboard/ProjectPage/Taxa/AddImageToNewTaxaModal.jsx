@@ -1,44 +1,75 @@
-import { Button, Modal, Upload } from "antd";
+import { Alert, Button, Modal, Upload } from "antd";
 import { connect } from "react-redux";
-import { updateTaxa } from "../../../../../redux/redux-modules/taxa/actions";
+import { uploadTaxaPhoto } from "../../../../../redux/redux-modules/taxa/actions";
 import { UploadOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 function AddImageToNewTaxaModal(props) {
-  const { open, setOpen } = props;
+  const { taxaId, setTaxaId, uploadTaxaPhoto } = props;
+  const [file, setFile] = useState();
+  const [error, setError] = useState();
 
-  console.log(open);
+  const submitPhoto = () => {
+    const formData = new FormData();
+    formData.append("photo", file);
 
-  const submitPhoto = () => {};
+    uploadTaxaPhoto(taxaId, formData)
+      .then(() => setTaxaId())
+      .catch((err) =>
+        setError(
+          err?.response?.data?.errors?.photo ??
+            err?.response?.statusText ??
+            "Error"
+        )
+      );
+  };
 
   const handleSkip = () => {
-    setOpen(false);
+    setTaxaId(false);
   };
 
   return (
     <Modal
-      title="Modal"
-      open={open}
+      title="Add Taxa Image"
+      open={taxaId}
       onOk={submitPhoto}
       onCancel={handleSkip}
       cancelText={"Submit Later"}
       okText="Submit"
     >
-      <p>teste</p>
-      <p>teste</p>
-      <p>teste</p>
-      <p>teste</p>
-      <p>teste</p>
-      <Upload>
-        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+      <Upload
+        maxCount={1}
+        beforeUpload={(file) => {
+          setFile(file);
+          return false;
+        }}
+        onRemove={() => setFile()}
+        accept="image/*"
+      >
+        <Button icon={<UploadOutlined />}>
+          Choose an image or drag it here
+        </Button>
       </Upload>
+      {error && (
+        <Alert style={{ marginTop: "20px" }} message={error} type="error" />
+      )}
     </Modal>
   );
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createTaxa: (data) => dispatch(updateTaxa(data)),
+    uploadTaxaPhoto: (id, data) => dispatch(uploadTaxaPhoto(id, data)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(AddImageToNewTaxaModal);
+const mapStateToProps = (state) => {
+  return {
+    loading: state.taxa.loading,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddImageToNewTaxaModal);

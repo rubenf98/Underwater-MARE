@@ -27,7 +27,7 @@ export function handleArrayToFormData(formData, array, field) {
 
     return formData;
 };
-export const requiredRule = [{ required: true, message: "'${name}' is required" }];
+export const requiredRule = [{ required: true, message: "'${label}' is required" }];
 
 export const formatPosition = (sighting) => ({
     lat: parseFloat(sighting.latitude),

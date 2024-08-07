@@ -1,7 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import Table from "antd/es/table";
 import { Spin } from "antd";
+import Table from "antd/es/table";
+import styled from "styled-components";
 
 const Container = styled.div`
   background: transparent;
@@ -90,7 +89,13 @@ function TableComponent({
         loading={loading}
         dataSource={data}
         size="small"
-        rowKey={(record) => record[rowKey]}
+        rowKey={(record) => {
+          if (typeof rowKey === "string") {
+            return record[rowKey];
+          } else {
+            return rowKey.map((el) => record[el]).join(",");
+          }
+        }}
         expandable={handleExpandable}
         scroll={scroll}
         rowSelection={rowSelection}

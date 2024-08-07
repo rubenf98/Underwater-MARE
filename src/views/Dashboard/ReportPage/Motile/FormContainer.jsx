@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Col, Form, Input, InputNumber, Modal, Row } from "antd";
-import styled from "styled-components";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+} from "antd";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import { requiredRule } from "src/helper";
-import RemoteSelectContainer from "../Report/RemoteSelectContainer";
+import styled from "styled-components";
+import RemoteSelectContainer from "../../ProjectPage/SizeCategory/RemoteSelectContainer";
 import RemoteCascadeContainer from "../../ProjectPage/Taxa/RemoteCascadeContainer";
-import TextArea from "antd/es/input/TextArea";
+import SurveySelectContainer from "../Report/RemoteSelectContainer";
 
 const CustomModal = styled(Modal)`
   .ant-modal-body {
@@ -22,9 +33,13 @@ function FormContainer(props) {
       if (current.id) {
         props
           .update(current.id, {
-            ...values,
             project_id: projectId,
-            taxa_id: values.taxa_id[1],
+            report_id: values.report_id,
+            type: values.type,
+            motiles: values.motiles.map((el) => {
+              el.taxa_id = el.taxa_id[1];
+              return el;
+            }),
           })
           .then(() => {
             handleCancel();
@@ -32,9 +47,13 @@ function FormContainer(props) {
       } else {
         props
           .create({
-            ...values,
             project_id: projectId,
-            taxa_id: values.taxa_id[1],
+            report_id: values.report_id,
+            type: values.type,
+            motiles: values.motiles.map((el) => {
+              el.taxa_id = el.taxa_id[1];
+              return el;
+            }),
           })
           .then(() => {
             handleCancel();
@@ -49,20 +68,21 @@ function FormContainer(props) {
   };
 
   useEffect(() => {
-    if (current.id) {
+    if (current.report_id) {
+      let motiles = [];
+      current.children.map((motile) => {
+        motiles.push({
+          ntotal: motile.ntotal,
+          size: motile.size,
+          taxa_id: [motile?.taxa?.category?.id, motile?.taxa?.id],
+          size_category_id: motile?.sizeCategory?.id,
+        });
+      });
+
       form.setFieldsValue({
-        taxa_id: [current.taxa.category.id, current.taxa.id],
-        report_id: current.report.id,
-        size_category_id: current?.sizeCategory?.id,
-        size: current.size,
-        "n0-25": current["n0-25"],
-        "n25-50": current["n25-50"],
-        ntotal: current.ntotal,
-        surveyed_area: current.surveyed_area,
-        "density/100": current["density/100"],
-        "density/1": current["density/1"],
-        "biomass/100": current["biomass/100"],
-        "biomass/1": current["biomass/1"],
+        report_id: current.report_id,
+        type: current.type,
+        motiles: motiles,
       });
     }
   }, [visible]);
@@ -84,80 +104,106 @@ function FormContainer(props) {
       >
         <Row gutter={16}>
           <Col xs={24} md={12}>
-            <Form.Item label="Report" name="report_id" rules={requiredRule}>
-              <RemoteSelectContainer />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item label="Taxa" name="taxa_id" rules={requiredRule}>
-              <RemoteCascadeContainer projectId={projectId} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item label="Size category" name="size_category_id">
-              <RemoteSelectContainer />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item label="Size (cm)" name="size">
-              <Input />
-            </Form.Item>
-          </Col>
-
-          <Col xs={24} md={6}>
-            <Form.Item label="n0-25" name="n0-25" rules={requiredRule}>
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={6}>
-            <Form.Item label="n25-50" name="n25-50" rules={requiredRule}>
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={6}>
-            <Form.Item label="ntotal" name="ntotal" rules={requiredRule}>
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={6}>
             <Form.Item
               label="Survey metadata"
-              name="surveyed_area"
+              name="report_id"
               rules={requiredRule}
             >
-              <InputNumber style={{ width: "100%" }} />
+              <SurveySelectContainer />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item label="Type" name="type" rules={requiredRule}>
+              <Select
+                options={[
+                  { value: "fishes", label: "fishes" },
+                  { value: "macroinv", label: "macroinv" },
+                  { value: "dom_sea_urchin", label: "dom_sea_urchin" },
+                  { value: "cryptic", label: "cryptic" },
+                ]}
+              />
             </Form.Item>
           </Col>
 
-          <Col xs={24} md={6}>
-            <Form.Item
-              label="Density/100"
-              name="density/100"
-              rules={requiredRule}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={6}>
-            <Form.Item label="Density/1" name="density/1" rules={requiredRule}>
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={6}>
-            <Form.Item label="gr/100" name="biomass/100">
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={6}>
-            <Form.Item label="gr/1" name="biomass/1">
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item label="Notes" name="note">
-              <TextArea style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
+          <Form.List initialValue={[undefined]} name="motiles">
+            {(fields, { add, remove }, { errors }) => (
+              <>
+                {fields.map((field, index) => (
+                  <>
+                    <Col style={{ padding: 0 }} xs={22}>
+                      <Flex justify="space-evenly" style={{ width: "100%" }}>
+                        <Col xs={24} md={6}>
+                          <Form.Item
+                            label={index === 0 ? "Taxa" : ""}
+                            name={[index, "taxa_id"]}
+                            rules={requiredRule}
+                          >
+                            <RemoteCascadeContainer projectId={projectId} />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={24} md={6}>
+                          <Form.Item
+                            label={index === 0 ? "Size category" : ""}
+                            name={[index, "size_category_id"]}
+                          >
+                            <RemoteSelectContainer />
+                          </Form.Item>
+                        </Col>
+
+                        <Col xs={24} md={6}>
+                          <Form.Item
+                            name={[index, "size"]}
+                            label={index === 0 ? "Size (cm)" : ""}
+                          >
+                            <Input />
+                          </Form.Item>
+                        </Col>
+
+                        <Col xs={24} md={6}>
+                          <Form.Item
+                            label={index === 0 ? "ntotal" : ""}
+                            name={[index, "ntotal"]}
+                            rules={requiredRule}
+                          >
+                            <InputNumber style={{ width: "100%" }} />
+                          </Form.Item>
+                        </Col>
+                      </Flex>
+                    </Col>
+                    <Col xs={2}>
+                      <Flex
+                        style={{ width: "100%", height: "100%" }}
+                        align="flex-end"
+                        justify="flex-end"
+                      >
+                        <Button
+                          disabled={fields?.length <= 1}
+                          style={{ width: "100%", marginBottom: "24px" }}
+                          danger
+                          onClick={() => remove(field.name)}
+                        >
+                          <MinusCircleOutlined />
+                        </Button>
+                      </Flex>
+                    </Col>
+                  </>
+                ))}
+                <Col xs={24}>
+                  <Form.Item>
+                    <Button
+                      style={{ width: "100%" }}
+                      type="dashed"
+                      onClick={() => add()}
+                      icon={<PlusOutlined />}
+                    >
+                      Add item
+                    </Button>
+                    <Form.ErrorList errors={errors} />
+                  </Form.Item>
+                </Col>
+              </>
+            )}
+          </Form.List>
         </Row>
       </Form>
     </CustomModal>

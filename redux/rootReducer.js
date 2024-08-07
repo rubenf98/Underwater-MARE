@@ -7,28 +7,30 @@ import locality from "./redux-modules/locality";
 import user from "./redux-modules/user";
 import taxa from "./redux-modules/taxa";
 import indicator from "./redux-modules/indicator";
-import category from "./redux-modules/category";
+import taxa_category from "./redux-modules/taxa_category";
 import depth from "./redux-modules/depth";
 import _function from "./redux-modules/function";
 import benthic from "./redux-modules/benthic";
 import substrate from "./redux-modules/substrate";
 import motile from "./redux-modules/motile";
+import size_category from "./redux-modules/size_category";
 
 const rootReducer = combineReducers({
-    auth,
-    contact,
-    project,
-    report,
-    locality,
-    user,
-    taxa,
-    indicator,
-    category,
-    depth,
-    _function,
-    benthic,
-    substrate,
-    motile
+  auth,
+  contact,
+  project,
+  report,
+  locality,
+  user,
+  taxa,
+  indicator,
+  taxa_category,
+  depth,
+  _function,
+  benthic,
+  substrate,
+  motile,
+  size_category,
 });
 
 export default rootReducer;

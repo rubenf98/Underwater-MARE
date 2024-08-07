@@ -44,7 +44,6 @@ function FormContainer(props) {
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-
       let initFunctions = [];
       props.functions.map((f) => {
         initFunctions.push({
@@ -113,11 +112,13 @@ function FormContainer(props) {
         transect: current.transect,
         time: current.time,
         replica: current.replica,
+        surveyed_area: current.surveyed_area,
+        n: current.n,
 
         ...initFunctions,
       });
 
-      handleDrag({ lngLat: { lat: current.latitude, lng: current.longitude } });
+      handlePositionChange({ lngLat: { lat: current.latitude, lng: current.longitude } });
     }
   }, [visible]);
 
@@ -132,7 +133,7 @@ function FormContainer(props) {
     setHasTouched([hasTouched[0], true]);
   };
 
-  const handleDrag = (e) => {
+  const handlePositionChange = (e) => {
     setLatitude(e.lngLat.lat);
     setLongitude(e.lngLat.lng);
     setHasTouched([true, true]);
@@ -263,6 +264,26 @@ function FormContainer(props) {
               />
             </Form.Item>
           </Col>
+          <Col xs={12} md={6}>
+            <Form.Item
+              label="Surveyed area"
+              name="surveyed_area"
+              rules={requiredRule}
+            >
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+          </Col>
+
+          <Col xs={12} md={6}>
+            <Form.Item label="N" name="n" rules={requiredRule}>
+              <Select
+                options={[
+                  { value: 100, label: 100 },
+                  { value: 200, label: 200 },
+                ]}
+              />
+            </Form.Item>
+          </Col>
 
           <Col span={24}>
             <h3>Dive team functions</h3>
@@ -326,6 +347,7 @@ function FormContainer(props) {
                     width: "100%",
                   }}
                   mapStyle="mapbox://styles/tigerwhale/cjpgrt1sccjs92sqjfnuixnxc"
+                  onClick={handlePositionChange}
                 >
                   {!isNaN(latitude) && !isNaN(longitude) && (
                     <Marker
@@ -333,7 +355,7 @@ function FormContainer(props) {
                       latitude={latitude}
                       color="red"
                       longitude={longitude}
-                      onDragEnd={handleDrag}
+                      onDragEnd={handlePositionChange}
                     />
                   )}
                 </Map>

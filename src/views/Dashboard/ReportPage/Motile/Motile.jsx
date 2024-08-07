@@ -1,104 +1,107 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
-import TableContainer from "./TableContainer";
-import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
-import { fetchMotiles, createMotile, updateMotile, deleteMotile } from "../../../../../redux/redux-modules/motile/actions";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import {
+  createMotile,
+  deleteMotile,
+  fetchMotiles,
+  updateMotile,
+} from "../../../../../redux/redux-modules/motile/actions";
 import { fetchSelectorTaxas } from "../../../../../redux/redux-modules/taxa/actions";
+import FormContainer from "./FormContainer";
+import TableContainer from "./TableContainer";
 
 import TitleAddSection from "../../Common/TitleAddSection";
 
 const ContentContainer = styled.div`
-    width: 100%;
-    margin: auto;
+  width: 100%;
+  margin: auto;
 `;
 
 const Container = styled.div`
-    width: 100%;
-    box-sizing: border-box;
-    
+  width: 100%;
+  box-sizing: border-box;
 `;
 
-
-
 function Motile(props) {
-    const { data, loading, meta, projectId } = props;
+  const { data, loading, meta, projectId } = props;
 
-    const [filters, setFilters] = useState({ project: projectId });
-    const [visible, setVisible] = useState(false)
-    const [current, setCurrent] = useState({})
+  const [filters, setFilters] = useState({ project: projectId });
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState({});
 
-    useEffect(() => {
-        props.fetchMotiles(1, filters)
+  useEffect(() => {
+    props.fetchMotiles(1, filters);
+  }, [filters]);
+  useEffect(() => {
+    props.fetchSelectorTaxas({ project_id: projectId });
+  }, []);
 
-    }, [filters])
-    useEffect(() => {
-        props.fetchSelectorTaxas({ project_id: projectId })
-    }, [])
+  function handlePageChange(pagination) {
+    props.fetchMotiles(pagination.current, filters);
+  }
 
+  const handleCancel = () => {
+    setCurrent({});
+    setVisible(false);
+  };
 
-    function handlePageChange(pagination) {
-        props.fetchMotiles(pagination.current, filters);
-    }
+  const handleEdit = (aCurrent) => {
+    setCurrent(aCurrent);
+    setVisible(true);
+  };
 
-    const handleCancel = () => {
-        setCurrent({});
-        setVisible(false)
-    }
+  return (
+    <Container>
+      <TitleAddSection title="Motile(s)" handleClick={() => setVisible(true)} />
 
-    const handleEdit = (aCurrent) => {
-        setCurrent(aCurrent);
-        setVisible(true)
-    }
-
-    return (
-        <Container>
-            <TitleAddSection
-                title="Motile(s)"
-                handleClick={() => setVisible(true)}
-            />
-
-            <ContentContainer>
-
-                <FormContainer
-                    visible={visible}
-                    handleCancel={handleCancel}
-                    current={current}
-                    create={props.createMotile}
-                    update={props.updateMotile}
-                    projectId={projectId}
-                />
-                <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by name or email" />
-                </Row>
-                <TableContainer
-                    handlePageChange={handlePageChange}
-                    data={data} loading={loading} meta={meta}
-                    setCurrent={handleEdit}
-                    handleDelete={props.deleteMotile}
-                />
-            </ContentContainer>
-        </Container>
-    )
+      <ContentContainer>
+        <FormContainer
+          visible={visible}
+          handleCancel={handleCancel}
+          current={current}
+          create={props.createMotile}
+          update={props.updateMotile}
+          projectId={projectId}
+        />
+        <Row style={{ marginBottom: "20px" }}>
+          <Input.Search
+            onSearch={(e) => setFilters({ search: e })}
+            size="large"
+            type="search"
+            placeholder="Search by name or email"
+          />
+        </Row>
+        <TableContainer
+          handlePageChange={handlePageChange}
+          data={data}
+          loading={loading}
+          meta={meta}
+          setCurrent={handleEdit}
+          handleDelete={props.deleteMotile}
+        />
+      </ContentContainer>
+    </Container>
+  );
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchMotiles: (page, filters) => dispatch(fetchMotiles(page, filters)),
-        updateMotile: (id, data) => dispatch(updateMotile(id, data)),
-        createMotile: (data) => dispatch(createMotile(data)),
-        deleteMotile: (id) => dispatch(deleteMotile(id)),
-        fetchSelectorTaxas: () => dispatch(fetchSelectorTaxas())
-    };
+  return {
+    fetchMotiles: (page, filters) => dispatch(fetchMotiles(page, filters)),
+    updateMotile: (id, data) => dispatch(updateMotile(id, data)),
+    createMotile: (data) => dispatch(createMotile(data)),
+    deleteMotile: (id) => dispatch(deleteMotile(id)),
+    fetchSelectorTaxas: () => dispatch(fetchSelectorTaxas()),
+  };
 };
 
 const mapStateToProps = (state) => {
-    return {
-        loading: state.motile.loading,
-        data: state.motile.data,
-        meta: state.motile.meta
-    };
+  return {
+    loading: state.motile.loading,
+    data: state.motile.data,
+    meta: state.motile.meta,
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Motile);

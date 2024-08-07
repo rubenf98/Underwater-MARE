@@ -14,7 +14,7 @@ import {
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { handleArrayToFormData, requiredRule } from "src/helper";
-import RemoteSelectContainer from "../Category/RemoteSelectContainer";
+import RemoteSelectContainer from "../TaxaCategory/RemoteSelectContainer";
 import indicator from "../../../../../redux/redux-modules/indicator";
 
 const CustomModal = styled(Modal)`

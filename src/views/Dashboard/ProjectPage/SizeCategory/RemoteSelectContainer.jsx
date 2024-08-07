@@ -1,11 +1,11 @@
 import { Select } from "antd";
 import React, { useEffect } from "react";
-import { fetchSelectorCategories } from "../../../../../redux/redux-modules/category/actions";
+import { fetchSelectorSizeCategories } from "../../../../../redux/redux-modules/size_category/actions";
 import { connect } from "react-redux";
 
 function RemoteSelectContainer(props) {
   useEffect(() => {
-    props.fetchSelectorCategories();
+    props.fetchSelectorSizeCategories();
   }, []);
 
   return (
@@ -24,15 +24,15 @@ function RemoteSelectContainer(props) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchSelectorCategories: (filters) =>
-      dispatch(fetchSelectorCategories(filters)),
+    fetchSelectorSizeCategories: (filters) =>
+      dispatch(fetchSelectorSizeCategories(filters)),
   };
 };
 
 const mapStateToProps = (state) => {
   return {
-    data: state.category.selector,
-    loading: state.category.loading,
+    data: state.size_category.selector,
+    loading: state.size_category.loading,
   };
 };
 

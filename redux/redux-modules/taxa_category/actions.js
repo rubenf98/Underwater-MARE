@@ -13,7 +13,7 @@ export const fetchTaxaCategories = (page = 1, filters = {}) => ({
 
 export const fetchSelectorTaxaCategories = (filters = {}) => ({
     type: types.FETCH_SELECTOR_CATEGORIES,
-    payload: axios.get(`${url}/selector/categories?${queryString.stringify(filters, {
+    payload: axios.get(`${url}/selector/taxa_categories?${queryString.stringify(filters, {
         arrayFormat: "index"
     })}`)
 });

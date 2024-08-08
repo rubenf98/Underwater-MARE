@@ -90,8 +90,8 @@ function TableContainer({
     },
     {
       title: "Density/100",
-      dataIndex: "density/100",
       width: 150,
+      render: (_, rest) => rest["density/1"] / 100,
     },
     {
       title: "Density/1",
@@ -100,8 +100,8 @@ function TableContainer({
     },
     {
       title: "gr/100",
-      dataIndex: "biomass/100",
       width: 150,
+      render: (_, rest) => rest["biomass/1"] / 100,
     },
     {
       title: "gr/1",

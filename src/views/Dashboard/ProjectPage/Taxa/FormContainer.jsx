@@ -1,21 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Row,
-  Select,
-  Space,
-} from "antd";
-import styled from "styled-components";
+import { Checkbox, Col, Form, Input, Modal, Row } from "antd";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { handleArrayToFormData, requiredRule } from "src/helper";
+import { requiredRule } from "src/helper";
+import styled from "styled-components";
 import RemoteSelectContainer from "../TaxaCategory/RemoteSelectContainer";
-import indicator from "../../../../../redux/redux-modules/indicator";
 
 const CustomModal = styled(Modal)`
   .ant-modal-body {
@@ -25,8 +13,6 @@ const CustomModal = styled(Modal)`
 
 function FormContainer(props) {
   const [form] = Form.useForm();
-  const [removeIds, setRemoveIds] = useState([]);
-  const [sites, setSites] = useState([]);
   const [indicatorList, setIndicatorList] = useState([]);
   const [selectedIndicatorList, setSelectedIndicatorList] = useState([]);
 
@@ -34,15 +20,42 @@ function FormContainer(props) {
 
   const handleOk = () => {
     form.validateFields().then((values) => {
+      let indicators = {};
+
+      Object.keys(values)
+        .filter((key) => key.includes("indicators"))
+        .map((key) => {
+          let indicator = key.split(".")[1];
+          indicators[indicator] = values[key];
+        });
+
       if (current.id) {
         props
-          .update(current.id, { ...values, project_id: projectId })
+          .update(current.id, {
+            indicators,
+            project_id: projectId,
+            id: current.id,
+            category_id: values?.category_id,
+            name: values.name,
+            genus: values.genus,
+            species: values.species,
+            phylum: values.phylum,
+          })
           .then(() => {
             handleCancel();
           });
       } else {
         props
-          .create({ ...values, project_id: projectId, validated: true })
+          .create({
+            indicators,
+            project_id: projectId,
+            validated: true,
+            category_id: values?.category_id,
+            name: values.name,
+            genus: values.genus,
+            species: values.species,
+            phylum: values.phylum,
+          })
           .then(() => {
             handleCancel();
           });
@@ -63,7 +76,8 @@ function FormContainer(props) {
       let currentIndicatorList = [];
 
       current.indicators.map((currentIndicator) => {
-        aIndicators[currentIndicator.name] = currentIndicator.pivot.name;
+        aIndicators["indicators." + currentIndicator.name] =
+          currentIndicator.pivot.name;
         currentIndicatorList.push(currentIndicator.name);
       });
 
@@ -150,12 +164,12 @@ function FormContainer(props) {
               <></>
             )}
           </Col>
-          {selectedIndicatorList.map((selectedIndicator) => (
-            <Col xs={24} md={12}>
+          {selectedIndicatorList.map((selectedIndicator, i) => (
+            <Col key={i} xs={24} md={12}>
               <Form.Item
                 key={selectedIndicator}
                 label={selectedIndicator}
-                name={selectedIndicator}
+                name={"indicators." + selectedIndicator}
                 rules={requiredRule}
               >
                 <Input />

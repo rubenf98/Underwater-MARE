@@ -108,20 +108,25 @@ function TableContainer({
       dataIndex: "biomass/1",
       width: 150,
     },
-
+    {
+      title: "Notes",
+      dataIndex: "notes",
+      width: 300,
+    },
     {
       title: "",
       dataIndex: "Operation",
       fixed: "right",
       width: 80,
-      render: (_, record) => (
-        <RowOperation
-          deleteRow
-          updateRow
-          onUpdateClick={() => setCurrent(record)}
-          onDeleteConfirm={() => handleDelete(record.id)}
-        />
-      ),
+      render: (_, record) =>
+        record.children && (
+          <RowOperation
+            deleteRow
+            updateRow
+            onUpdateClick={() => setCurrent(record)}
+            onDeleteConfirm={() => handleDelete(record.id)}
+          />
+        ),
     },
   ];
 

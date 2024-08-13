@@ -7,6 +7,10 @@ const CustomModal = styled(Modal)`
   .ant-modal-body {
     padding: 30px 60px;
   }
+
+  .ant-modal-title {
+    font-size: 1.25rem;
+  }
 `;
 
 const requiredRule = { required: true };

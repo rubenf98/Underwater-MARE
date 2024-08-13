@@ -30,7 +30,8 @@ function TableContainer({
       title: "Sample",
       dataIndex: "code",
       key: "report_id",
-      render: (code, row) => (code ? code + " (#" + row.report_id + ")" : ""),
+      render: (code, row) =>
+        code ? code + (row?.report_id ? " (#" + row.report_id + ")" : "") : "",
     },
     {
       title: "P##",
@@ -55,7 +56,7 @@ function TableContainer({
       title: "",
       dataIndex: "Operation",
       render: (_, record) =>
-        record.code && (
+        record.children && (
           <RowOperation
             deleteRow
             updateRow

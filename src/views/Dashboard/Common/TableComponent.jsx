@@ -41,6 +41,10 @@ const Container = styled.div`
   .ant-pagination-total-text {
     margin-right: auto;
   }
+
+  tr.border-top > td {
+    border-top: 1px solid #757575;
+  }
 `;
 
 function TableComponent({
@@ -58,6 +62,7 @@ function TableComponent({
   handleShowSizeChange,
   scroll,
   rowSelection,
+  editable,
 }) {
   if (loading && !data)
     return <Spin style={{ width: "100%" }} tip="Loading data" />;
@@ -66,7 +71,17 @@ function TableComponent({
     <Container>
       <Table
         // scroll={{ x: "100%" }}
-        rowClassName={() => "editable-row"}
+        rowClassName={(row, i) => {
+          let className = "";
+
+          if (editable) {
+            className += "editable-row";
+          }
+          if (i > 0 && row.children) {
+            className += " border-top";
+          }
+          return className;
+        }}
         bordered={bordered}
         onRow={onRow}
         indentSize={0}

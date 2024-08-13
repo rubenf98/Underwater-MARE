@@ -22,6 +22,10 @@ const CustomModal = styled(Modal)`
   .ant-modal-body {
     padding: 30px 60px;
   }
+
+  .ant-modal-title {
+    font-size: 1.25rem;
+  }
 `;
 
 function FormContainer(props) {
@@ -30,6 +34,7 @@ function FormContainer(props) {
 
   const handleOk = () => {
     form.validateFields().then((values) => {
+      console.log(current);
       if (current.id) {
         props
           .update(current.id, {
@@ -74,6 +79,7 @@ function FormContainer(props) {
         motiles.push({
           ntotal: motile.ntotal,
           size: motile.size,
+          notes: motile.notes,
           taxa_id: [motile?.taxa?.category?.id, motile?.taxa?.id],
           size_category_id: motile?.sizeCategory?.id,
         });
@@ -86,6 +92,8 @@ function FormContainer(props) {
       });
     }
   }, [visible]);
+
+  const type = Form.useWatch("type", form);
 
   return (
     <CustomModal
@@ -104,11 +112,7 @@ function FormContainer(props) {
       >
         <Row gutter={16}>
           <Col xs={24} md={12}>
-            <Form.Item
-              label="Survey metadata"
-              name="report_id"
-              rules={requiredRule}
-            >
+            <Form.Item label="Sample" name="report_id" rules={requiredRule}>
               <SurveySelectContainer />
             </Form.Item>
           </Col>
@@ -116,10 +120,10 @@ function FormContainer(props) {
             <Form.Item label="Type" name="type" rules={requiredRule}>
               <Select
                 options={[
-                  { value: "fishes", label: "fishes" },
-                  { value: "macroinv", label: "macroinv" },
-                  { value: "dom_sea_urchin", label: "dom_sea_urchin" },
+                  { value: "fish", label: "fish" },
+                  { value: "macroinvertebrates", label: "macroinvertebrates" },
                   { value: "cryptic", label: "cryptic" },
+                  { value: "dom_urchin", label: "dom_urchin" },
                 ]}
               />
             </Form.Item>
@@ -132,40 +136,56 @@ function FormContainer(props) {
                   <>
                     <Col style={{ padding: 0 }} xs={22}>
                       <Flex justify="space-evenly" style={{ width: "100%" }}>
-                        <Col xs={24} md={6}>
+                        <Col xs={24} md={type === "fish" ? 6 : 10}>
                           <Form.Item
                             label={index === 0 ? "Taxa" : ""}
                             name={[index, "taxa_id"]}
                             rules={requiredRule}
                           >
-                            <RemoteCascadeContainer projectId={projectId} />
+                            <RemoteCascadeContainer
+                              projectId={projectId}
+                              categories={["macroinv", "fish", "other"]}
+                            />
                           </Form.Item>
                         </Col>
-                        <Col xs={24} md={6}>
-                          <Form.Item
-                            label={index === 0 ? "Size category" : ""}
-                            name={[index, "size_category_id"]}
-                          >
-                            <RemoteSelectContainer />
-                          </Form.Item>
-                        </Col>
+                        {type === "fish" && (
+                          <Col xs={24} md={4}>
+                            <Form.Item
+                              label={index === 0 ? "Size category" : ""}
+                              name={[index, "size_category_id"]}
+                            >
+                              <RemoteSelectContainer />
+                            </Form.Item>
+                          </Col>
+                        )}
 
-                        <Col xs={24} md={6}>
-                          <Form.Item
-                            name={[index, "size"]}
-                            label={index === 0 ? "Size (cm)" : ""}
-                          >
-                            <Input />
-                          </Form.Item>
-                        </Col>
+                        {type === "fish" && (
+                          <Col xs={24} md={4}>
+                            <Form.Item
+                              name={[index, "size"]}
+                              label={index === 0 ? "Size (cm)" : ""}
+                            >
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        )}
 
-                        <Col xs={24} md={6}>
+                        <Col xs={24} md={type === "fish" ? 4 : 4}>
                           <Form.Item
                             label={index === 0 ? "ntotal" : ""}
                             name={[index, "ntotal"]}
                             rules={requiredRule}
                           >
                             <InputNumber style={{ width: "100%" }} />
+                          </Form.Item>
+                        </Col>
+
+                        <Col xs={24} md={type === "fish" ? 6 : 10}>
+                          <Form.Item
+                            label={index === 0 ? "Notes" : ""}
+                            name={[index, "notes"]}
+                          >
+                            <Input />
                           </Form.Item>
                         </Col>
                       </Flex>

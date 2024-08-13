@@ -24,11 +24,16 @@ const CustomModal = styled(Modal)`
   .ant-modal-body {
     padding: 30px 60px;
   }
+
+  .ant-modal-title{
+    font-size: 1.25rem;
+  }
 `;
 
 function FormContainer(props) {
   const [form] = Form.useForm();
   const [sample, setSample] = useState([
+    undefined,
     undefined,
     undefined,
     undefined,
@@ -82,7 +87,7 @@ function FormContainer(props) {
     sample.map((field, index) => {
       field == undefined && (isReady = false);
       string = string + field;
-      if (index != sample.length - 1) {
+      if (field && index != sample.length - 1) {
         string = string + "_";
       }
     });
@@ -118,7 +123,9 @@ function FormContainer(props) {
         ...initFunctions,
       });
 
-      handlePositionChange({ lngLat: { lat: current.latitude, lng: current.longitude } });
+      handlePositionChange({
+        lngLat: { lat: current.latitude, lng: current.longitude },
+      });
     }
   }, [visible]);
 
@@ -155,7 +162,7 @@ function FormContainer(props) {
   const handleDepth = (e) => {
     const depth = props.depths.find((element) => element.id == e);
 
-    handleSampleChange("D" + depth.id, 3);
+    handleSampleChange("D" + depth.id, 4);
   };
 
   const handleSampleChange = (value, index) => {
@@ -193,7 +200,7 @@ function FormContainer(props) {
           </Col>
           <Col xs={24} md={6}>
             <Form.Item
-              label="Site and locality"
+              label="Locality and Site"
               name="site"
               rules={requiredRule}
             >
@@ -219,13 +226,18 @@ function FormContainer(props) {
           </Col>
           <Col xs={24} md={6}>
             <Form.Item label="Heading direction" name="heading_direction">
-              <Input />
+              <Select
+                options={[
+                  { value: "F", label: "F" },
+                  { value: "R", label: "R" },
+                ]}
+              />
             </Form.Item>
           </Col>
 
           <Col xs={24} md={6}>
             <Form.Item label="Site area" name="site_area">
-              <Input />
+              <Input onChange={(e) => handleSampleChange(e.target.value, 2)} />
             </Form.Item>
           </Col>
           <Col xs={24} md={6}>
@@ -251,7 +263,7 @@ function FormContainer(props) {
           <Col xs={12} md={6}>
             <Form.Item label="Time#" name="time" rules={requiredRule}>
               <InputNumber
-                onChange={(e) => handleSampleChange("Time" + e, 2)}
+                onChange={(e) => handleSampleChange("Time" + e, 3)}
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -259,7 +271,7 @@ function FormContainer(props) {
           <Col xs={12} md={6}>
             <Form.Item label="Replica#" name="replica" rules={requiredRule}>
               <InputNumber
-                onChange={(e) => handleSampleChange("R" + e, 4)}
+                onChange={(e) => handleSampleChange("R" + e, 5)}
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -270,12 +282,6 @@ function FormContainer(props) {
               name="surveyed_area"
               rules={requiredRule}
             >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-
-          <Col xs={12} md={6}>
-            <Form.Item label="N" name="n" rules={requiredRule}>
               <Select
                 options={[
                   { value: 100, label: 100 },

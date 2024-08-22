@@ -102,7 +102,7 @@ function FormContainer(props) {
       case "macroinvertebrates":
         return { categories: ["macroinv"] };
       case "cryptic":
-        return { categories: ["fish", "macroinv"] };
+        return { categories: ["fish", "macroinv", "litter"] };
       case "dom_urchin":
         return {
           categories: ["macroinv"],

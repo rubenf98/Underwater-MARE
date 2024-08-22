@@ -1,22 +1,12 @@
-import {
-  Button,
-  Cascader,
-  Divider,
-  Flex,
-  Input,
-  Popover,
-  Select,
-  Tooltip,
-} from "antd";
-import { connect } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons";
+import { Button, Cascader, Divider, Flex, Input, Select, Tooltip } from "antd";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import {
   createTaxa,
   fetchSelectorTaxas,
 } from "../../../../../redux/redux-modules/taxa/actions";
-import { useState } from "react";
 import AddImageToNewTaxaModal from "./AddImageToNewTaxaModal";
-import styled from "styled-components";
 
 function RemoteCascadeContainer(props) {
   const [openCascader, setOpenCascader] = useState(false);
@@ -24,7 +14,30 @@ function RemoteCascadeContainer(props) {
   const [newTaxaName, setNewTaxaName] = useState();
   const [createTaxaError, setCreateTaxaError] = useState();
   const [newTaxaCategoryId, setNewTaxaCategoryId] = useState(1);
-  const { data, onChange, value, projectId, categories } = props;
+  const { data, onChange, value, projectId, categories, species } = props;
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    let optionsAux;
+    if (categories) {
+      optionsAux = [...data].filter((el) => categories.includes(el.name));
+    } else {
+      optionsAux = [...data];
+    }
+
+    if (species) {
+      optionsAux = [...optionsAux].map((el) => ({
+        ...el,
+        taxas: el.taxas.filter((taxa) => species.includes(taxa.name)),
+      }));
+    }
+
+    if (optionsAux?.length <= 1) {
+      optionsAux = optionsAux[0].taxas;
+    }
+
+    setOptions(optionsAux);
+  }, [species, categories]);
 
   return (
     <>
@@ -39,9 +52,7 @@ function RemoteCascadeContainer(props) {
           children: "taxas",
         }}
         expandTrigger="hover"
-        options={
-          categories ? data.filter((el) => categories.includes(el.name)) : data
-        }
+        options={options}
         onChange={(e) => {
           setOpenCascader(false);
           onChange(e);

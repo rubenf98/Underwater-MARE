@@ -58,8 +58,6 @@ function Benthic(props) {
           visible={visible}
           handleCancel={handleCancel}
           current={current}
-          create={props.createBenthic}
-          update={props.updateBenthic}
           projectId={projectId}
         />
         <Row style={{ marginBottom: "20px" }}>
@@ -86,8 +84,6 @@ function Benthic(props) {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchBenthics: (page, filters) => dispatch(fetchBenthics(page, filters)),
-    updateBenthic: (id, data) => dispatch(updateBenthic(id, data)),
-    createBenthic: (data) => dispatch(createBenthic(data)),
     deleteBenthic: (id) => dispatch(deleteBenthic(id)),
   };
 };

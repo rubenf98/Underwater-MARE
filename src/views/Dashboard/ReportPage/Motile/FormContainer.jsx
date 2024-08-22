@@ -95,6 +95,31 @@ function FormContainer(props) {
 
   const type = Form.useWatch("type", form);
 
+  const getTaxaFilters = (type) => {
+    switch (type) {
+      case "fish":
+        return { categories: ["fish"] };
+      case "macroinvertebrates":
+        return { categories: ["macroinv"] };
+      case "cryptic":
+        return { categories: ["fish", "macroinv"] };
+      case "dom_urchin":
+        return {
+          categories: ["macroinv"],
+          species: [
+            "Diadema africanum",
+            "Sphaerechinus granularis",
+            "Arbacia lixula",
+            "Centrostephanus longispinus",
+            "Paracentrotus lividus",
+          ],
+        };
+
+      default:
+        return { categories: ["macroinv", "fish", "other"] };
+    }
+  };
+
   return (
     <CustomModal
       width={1280}
@@ -143,8 +168,9 @@ function FormContainer(props) {
                             rules={requiredRule}
                           >
                             <RemoteCascadeContainer
+                              species={getTaxaFilters(type).species}
                               projectId={projectId}
-                              categories={["macroinv", "fish", "other"]}
+                              categories={getTaxaFilters(type).categories}
                             />
                           </Form.Item>
                         </Col>

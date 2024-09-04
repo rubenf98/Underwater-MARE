@@ -15,7 +15,7 @@ const ContentContainer = styled.div`
 const Container = styled.section`
     width: 100%;
     box-sizing: border-box;
-    
+
 `;
 
 function Indicator(props) {
@@ -61,7 +61,7 @@ function Indicator(props) {
                     projectId={projectId}
                 />
                 <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by indicator" />
+                    <Input.Search onSearch={(e) => setFilters({ ...filters,search: e })} size="large" type="search" placeholder="Search by indicator" />
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}

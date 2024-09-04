@@ -14,6 +14,7 @@ import benthic from "./redux-modules/benthic";
 import substrate from "./redux-modules/substrate";
 import motile from "./redux-modules/motile";
 import size_category from "./redux-modules/size_category";
+import permissions from "./redux-modules/permissions";
 
 const rootReducer = combineReducers({
   auth,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   substrate,
   motile,
   size_category,
+  permissions
 });
 
 export default rootReducer;

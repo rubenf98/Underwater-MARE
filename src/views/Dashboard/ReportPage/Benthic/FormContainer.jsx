@@ -7,12 +7,12 @@ import { fetchSelectorSubstrates } from "../../../../../redux/redux-modules/subs
 import { fetchSelectorTaxas } from "../../../../../redux/redux-modules/taxa/actions";
 import RemoteCascadeContainer from "../../ProjectPage/Taxa/RemoteCascadeContainer";
 
-import SubstrateRemoteSelectContainer from "../../ProjectPage/Substrate/ExternalRemoteSelectContainer";
-import ReportRemoteSelectContainer from "../Report/RemoteSelectContainer";
 import {
   createBenthic,
   updateBenthic,
 } from "../../../../../redux/redux-modules/benthic/actions";
+import SubstrateRemoteSelectContainer from "../../ProjectPage/Substrate/ExternalRemoteSelectContainer";
+import ReportRemoteSelectContainer from "../Report/RemoteSelectContainer";
 
 const CustomModal = styled(Modal)`
   .ant-modal-body {
@@ -48,6 +48,7 @@ function FormContainer(props) {
   };
 
   const handleFill = () => {
+    let fill = true;
     let values = form.getFieldsValue();
     let benthicsBeforeFill = values.benthics;
     let benthicsAfterFill = [];
@@ -56,6 +57,15 @@ function FormContainer(props) {
 
     let other_taxa = taxas.find((el) => el.name === "other");
     let bare_taxa = other_taxa?.taxas?.find((el) => el.name === "Bare");
+
+    if (!other_taxa || !bare_taxa) {
+      fill = false;
+      message.error({
+        content: "You need to create the Other/Bare taxa first",
+        key: "no-bare-taxa",
+      });
+    }
+
     let bare = [other_taxa.id, bare_taxa.id];
 
     benthicsBeforeFill.forEach((benthic) => {
@@ -67,6 +77,7 @@ function FormContainer(props) {
         if (substrate) {
           row.substrate_id = substrate;
         } else {
+          fill = false;
           message.error({
             content: "You need to fill P##1's substrate",
             key: "first-substrate-error",
@@ -83,7 +94,6 @@ function FormContainer(props) {
         } else {
           //other - Bare
           row.taxa_id = bare;
-          console.log("bare");
         }
       }
       row.notes = benthic.notes;
@@ -91,16 +101,17 @@ function FormContainer(props) {
 
       benthicsAfterFill.push(row);
     });
-
-    form.setFieldsValue({
-      benthics: benthicsAfterFill,
-    });
+    if (fill) {
+      form.setFieldsValue({
+        benthics: benthicsAfterFill,
+      });
+    }
   };
 
   useEffect(() => {
     if (visible) {
       props.fetchSelectorSubstrates({ project_id: projectId });
-      props.fetchSelectorTaxas({ project_id: projectId });
+      props.fetchSelectorTaxas({ project: projectId });
 
       if (current.report_id) {
         var newBenthics = [];
@@ -119,13 +130,44 @@ function FormContainer(props) {
         });
       } else {
         // Init p## field for 100 transects
-        a = new Array(2);
-        for (var i = 0, a = []; i < 100; a[i++] = { p: i });
+        let a = new Array(20).fill(1).map((_, i) => ({ p: i + 1 }));
 
         form.setFieldValue("benthics", a);
       }
     }
   }, [visible]);
+
+  const benthics = Form.useWatch("benthics", form);
+
+  //THIS IS A FEATURE THAT LOADS THE 100 POINTS OF BENTHICS ON BOTTOM SCROLL REACH
+  // const handleScroll = (e) => {
+  //   const { scrollHeight, scrollTop, clientHeight } = e.target;
+
+  //   if (Math.abs(scrollHeight - clientHeight - scrollTop) < 1) {
+  //     //Reached bottom of page
+  //     let benthics = form.getFieldsValue().benthics;
+
+  //     console.log(benthics);
+  //     if (benthics?.length < 100) {
+  //       let a = new Array(20)
+  //         .fill(1)
+  //         .map((_, i) => ({ p: benthics?.length + i + 1 }));
+
+  //       form.setFieldValue("benthics", [...benthics, ...a]);
+  //     }
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   let el = document.getElementsByClassName("ant-modal-wrap")[0];
+  //   if (visible && el) {
+  //     el.addEventListener("scroll", handleScroll);
+
+  //     return () => {
+  //       el.removeEventListener("scroll", handleScroll);
+  //     };
+  //   }
+  // }, [visible]);
 
   return (
     <CustomModal
@@ -136,7 +178,11 @@ function FormContainer(props) {
       centered
       onOk={handleOk}
       footer={[
-        <Button key="fill" onClick={handleFill}>
+        <Button
+          key="fill"
+          disabled={benthics ? !benthics[0].substrate_id : true}
+          onClick={handleFill}
+        >
           Fill
         </Button>,
         <Button key="cancel" onClick={handleCancel}>

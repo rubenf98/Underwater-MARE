@@ -1,13 +1,12 @@
 import { types } from "./types";
-import axios from "axios";
+import axiosConfig from "../../../src/axiosConfig";
 import queryString from "query-string";
 
-const url = `${import.meta.env.VITE_API}/api/underwater-survey`;
 
 export const fetchTaxas = (page = 1, filters = {}) => ({
   type: types.FETCH_TAXAS,
-  payload: axios.get(
-    `${url}/taxas?${queryString.stringify(filters, {
+  payload: axiosConfig.get(
+    `/taxas?${queryString.stringify(filters, {
       arrayFormat: "index",
     })}&page=${page}`
   ),
@@ -15,8 +14,8 @@ export const fetchTaxas = (page = 1, filters = {}) => ({
 
 export const fetchSelectorTaxas = (filters = {}) => ({
   type: types.FETCH_SELECTOR_TAXAS,
-  payload: axios.get(
-    `${url}/selector/taxa-categories?${queryString.stringify(filters, {
+  payload: axiosConfig.get(
+    `/selector/taxa-categories?${queryString.stringify(filters, {
       arrayFormat: "index",
     })}`
   ),
@@ -24,22 +23,22 @@ export const fetchSelectorTaxas = (filters = {}) => ({
 
 export const createTaxa = (data) => ({
   type: types.CREATE_TAXA,
-  payload: axios.post(`${url}/taxas`, data),
+  payload: axiosConfig.post(`/taxas`, data),
 });
 
 export const updateValidation = (id, data) => ({
   type: types.UPDATE_TAXA,
-  payload: axios.put(`${url}/taxas/toggle-validation/${id}`, data),
+  payload: axiosConfig.put(`/taxas/toggle-validation/${id}`, data),
 });
 
 export const updateTaxa = (id, data) => ({
   type: types.UPDATE_TAXA,
-  payload: axios.put(`${url}/taxas/${id}`, data),
+  payload: axiosConfig.put(`/taxas/${id}`, data),
 });
 
 export const uploadTaxaPhoto = (id, data) => ({
   type: types.UPDATE_TAXA,
-  payload: axios.post(`${url}/taxas/photo/${id}`, data, {
+  payload: axiosConfig.post(`/taxas/photo/${id}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -48,6 +47,6 @@ export const uploadTaxaPhoto = (id, data) => ({
 
 export const deleteTaxa = (id) => ({
   type: types.DELETE_TAXA,
-  payload: axios.delete(`${url}/taxas/${id}`),
+  payload: axiosConfig.delete(`/taxas/${id}`),
   meta: { id },
 });

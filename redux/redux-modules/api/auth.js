@@ -1,13 +1,11 @@
-import axios from "axios";
+import axiosConfig from "../../../src/axiosConfig";
 
-const url = `${import.meta.env.VITE_API}/api`;
+const createUser = (data) => axiosConfig.post(`/register`, data);
 
-const createUser = (data) => axios.post(`${url}/register`, data);
-
-const login = (data) => axios.post(`${url}/login`, data);
+const login = (data) => axiosConfig.post(`${import.meta.env.VITE_API}/api/login`, data);
 
 const updateProfilePicture = (id, data) =>
-  axios.post(`${url}/profile-picture/${id}`, data);
+  axiosConfig.post(`/profile-picture/${id}`, data);
 
 const api = {
   createUser,

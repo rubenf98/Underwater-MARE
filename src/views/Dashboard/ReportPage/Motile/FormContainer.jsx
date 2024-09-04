@@ -31,10 +31,10 @@ const CustomModal = styled(Modal)`
 function FormContainer(props) {
   const [form] = Form.useForm();
   const { current, visible, projectId } = props;
+  const type = Form.useWatch("type", form);
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      console.log(current);
       if (current.id) {
         props
           .update(current.id, {
@@ -56,7 +56,8 @@ function FormContainer(props) {
             report_id: values.report_id,
             type: values.type,
             motiles: values.motiles.map((el) => {
-              el.taxa_id = el.taxa_id[1];
+              el.taxa_id =
+                el.taxa_id?.length > 1 ? el.taxa_id[1] : el.taxa_id[0];
               return el;
             }),
           })
@@ -69,7 +70,7 @@ function FormContainer(props) {
 
   const handleCancel = () => {
     props.handleCancel();
-    form.resetFields();
+    form.resetFields("motiles");
   };
 
   useEffect(() => {
@@ -92,8 +93,6 @@ function FormContainer(props) {
       });
     }
   }, [visible]);
-
-  const type = Form.useWatch("type", form);
 
   const getTaxaFilters = (type) => {
     switch (type) {
@@ -123,7 +122,7 @@ function FormContainer(props) {
   return (
     <CustomModal
       width={1280}
-      title="Edit motile report"
+      title={current?.report_id ? "Edit motile report" : "Create motile report"}
       open={visible}
       onCancel={handleCancel}
       centered
@@ -138,7 +137,7 @@ function FormContainer(props) {
         <Row gutter={16}>
           <Col xs={24} md={12}>
             <Form.Item label="Sample" name="report_id" rules={requiredRule}>
-              <SurveySelectContainer />
+              <SurveySelectContainer projectId={projectId} />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
@@ -168,6 +167,7 @@ function FormContainer(props) {
                             rules={requiredRule}
                           >
                             <RemoteCascadeContainer
+                              disabled={!type}
                               species={getTaxaFilters(type).species}
                               projectId={projectId}
                               categories={getTaxaFilters(type).categories}

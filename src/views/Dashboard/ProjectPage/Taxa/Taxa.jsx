@@ -16,7 +16,7 @@ const ContentContainer = styled.div`
 const Container = styled.div`
     width: 100%;
     box-sizing: border-box;
-    
+
 `;
 
 
@@ -69,7 +69,7 @@ function Taxa(props) {
                     projectId={projectId}
                 />
                 <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by species, genus, phylum or category" />
+                    <Input.Search onSearch={(e) => setFilters({ ...filters,search: e })} size="large" type="search" placeholder="Search by species, genus, phylum or category" />
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}

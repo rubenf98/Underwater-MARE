@@ -1,5 +1,5 @@
 import { types } from "./types";
-import axios from "axios";
+import axiosConfig from "../../../src/axiosConfig";
 
 import api from "../api/contact";
 

@@ -15,7 +15,7 @@ const ContentContainer = styled.div`
 const Container = styled.section`
     width: 100%;
     box-sizing: border-box;
-    
+
 `;
 
 function Depth(props) {
@@ -61,7 +61,7 @@ function Depth(props) {
                     projectId={projectId}
                 />
                 <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by depth" />
+                    <Input.Search onSearch={(e) => setFilters({ ...filters, search: e })} size="large" type="search" placeholder="Search by depth" />
                 </Row>
                 <TableContainer
                     handlePageChange={handlePageChange}

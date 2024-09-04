@@ -7,11 +7,11 @@ import RowOperation from "../../Common/RowOperation";
 
 const Container = styled.div`
     width: 100%;
-    
+
     .editable-row {
         cursor: pointer;
     }
-    
+
     .ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
         display: none;
     }
@@ -31,6 +31,7 @@ function TableContainer({ loading, data, meta, handlePageChange, setCurrent, han
         {
             title: '',
             dataIndex: 'Operation',
+            width: 50,
             render: (_, record) =>
                 <RowOperation
                     deleteRow

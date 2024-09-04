@@ -212,7 +212,8 @@ function TableContainer({
     {
       title: "",
       dataIndex: "Operation",
-      width: 80,
+      fixed: "right",
+      width: 50,
       render: (_, record) => (
         <RowOperation
           deleteRow

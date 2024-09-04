@@ -1,35 +1,34 @@
 import { types } from "./types";
-import axios from "axios";
+import axiosConfig from "../../../src/axiosConfig";
 import queryString from "query-string";
 
-const url = `${import.meta.env.VITE_API}/api/underwater-survey`;
 
 export const fetchIndicators = (page = 1, filters = {}) => ({
     type: types.FETCH_INDICATORS,
-    payload: axios.get(`${url}/indicators?${queryString.stringify(filters, {
+    payload: axiosConfig.get(`/indicators?${queryString.stringify(filters, {
         arrayFormat: "index"
     })}&page=${page}`)
 });
 
 export const fetchIndicatorSelector = (filters = {}) => ({
     type: types.FETCH_INDICATOR_SELECTOR,
-    payload: axios.get(`${url}/selector/indicators?${queryString.stringify(filters, {
+    payload: axiosConfig.get(`/selector/indicators?${queryString.stringify(filters, {
         arrayFormat: "index"
     })}`)
 });
 
 export const createIndicator = (data) => ({
     type: types.CREATE_INDICATOR,
-    payload: axios.post(`${url}/indicators`, data),
+    payload: axiosConfig.post(`/indicators`, data),
 });
 
 export const updateIndicator = (id, data) => ({
     type: types.UPDATE_INDICATOR,
-    payload: axios.put(`${url}/indicators/${id}`, data),
+    payload: axiosConfig.put(`/indicators/${id}`, data),
 });
 
 export const deleteIndicator = id => ({
     type: types.DELETE_INDICATOR,
-    payload: axios.delete(`${url}/indicators/${id}`),
+    payload: axiosConfig.delete(`/indicators/${id}`),
     meta: { id }
 });

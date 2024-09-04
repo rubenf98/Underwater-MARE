@@ -1,35 +1,34 @@
 import { types } from "./types";
-import axios from "axios";
+import axiosConfig from "../../../src/axiosConfig";
 import queryString from "query-string";
 
-const url = `${import.meta.env.VITE_API}/api/underwater-survey`;
 
 export const fetchLocalities = (page = 1, filters = {}) => ({
     type: types.FETCH_LOCALITIES,
-    payload: axios.get(`${url}/localities?${queryString.stringify(filters, {
+    payload: axiosConfig.get(`/localities?${queryString.stringify(filters, {
         arrayFormat: "index"
     })}&page=${page}`)
 });
 
 export const fetchSelectorLocalities = (filters = {}) => ({
     type: types.FETCH_SELECTOR_LOCALITIES,
-    payload: axios.get(`${url}/selector/localities?${queryString.stringify(filters, {
+    payload: axiosConfig.get(`/selector/localities?${queryString.stringify(filters, {
         arrayFormat: "index"
     })}`)
 });
 
 export const createLocality = (data) => ({
     type: types.CREATE_LOCALITY,
-    payload: axios.post(`${url}/localities`, data),
+    payload: axiosConfig.post(`/localities`, data),
 });
 
 export const updateLocality = (id, data) => ({
     type: types.UPDATE_LOCALITY,
-    payload: axios.put(`${url}/localities/${id}`, data),
+    payload: axiosConfig.put(`/localities/${id}`, data),
 });
 
 export const deleteLocality = id => ({
     type: types.DELETE_LOCALITY,
-    payload: axios.delete(`${url}/localities/${id}`),
+    payload: axiosConfig.delete(`/localities/${id}`),
     meta: { id }
 });

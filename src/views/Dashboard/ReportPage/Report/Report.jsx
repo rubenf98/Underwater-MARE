@@ -1,17 +1,17 @@
-import { Col, Input, Row } from "antd";
-import React, { useState, useEffect } from "react";
-import { fetchSelectorFunctions } from "../../../../../redux/redux-modules/function/actions";
-import TableContainer from "./TableContainer";
-import {
-  fetchReports,
-  createReport,
-  updateReport,
-  deleteReport,
-} from "../../../../../redux/redux-modules/report/actions";
+import { Input, Row } from "antd";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { fetchSelectorFunctions } from "../../../../../redux/redux-modules/function/actions";
+import {
+  createReport,
+  deleteReport,
+  fetchReports,
+  updateReport,
+} from "../../../../../redux/redux-modules/report/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
 import FormContainer from "./FormContainer";
+import TableContainer from "./TableContainer";
 
 const Container = styled.div`
   width: 100%;
@@ -25,7 +25,7 @@ const ContentContainer = styled.div`
 `;
 
 function Report(props) {
-  const { data, loading, meta, projectId } = props;
+  const { data, loading, meta, projectId, permissions } = props;
   const [filters, setFilters] = useState({ project: projectId });
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState({});
@@ -51,7 +51,11 @@ function Report(props) {
 
   return (
     <Container>
-      <TitleAddSection title="Survey(s)" handleClick={() => setVisible(true)} />
+      <TitleAddSection
+        permissions={permissions}
+        title="Survey(s)"
+        handleClick={() => setVisible(true)}
+      />
 
       <ContentContainer>
         <FormContainer
@@ -64,7 +68,7 @@ function Report(props) {
         />
         <Row style={{ marginBottom: "20px" }}>
           <Input.Search
-            onSearch={(e) => setFilters({ search: e })}
+            onSearch={(e) => setFilters({ ...filters, search: e })}
             size="large"
             type="search"
             placeholder="Search by locality or site"

@@ -14,37 +14,73 @@ function RemoteCascadeContainer(props) {
   const [newTaxaName, setNewTaxaName] = useState();
   const [createTaxaError, setCreateTaxaError] = useState();
   const [newTaxaCategoryId, setNewTaxaCategoryId] = useState(1);
-  const { data, onChange, value, projectId, categories, species } = props;
+  const {
+    data,
+    onChange,
+    value,
+    projectId,
+    categories,
+    species,
+    loading,
+    disabled,
+  } = props;
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
+    props.fetchSelectorTaxas({
+      project: projectId,
+    });
+  }, []);
+
+  const updateList = () => {
     let optionsAux;
     if (categories) {
-      optionsAux = [...data].filter((el) => categories.includes(el.name));
+      optionsAux = [...data]
+        .filter((el) => el?.taxas?.length > 0)
+        .filter((el) => categories.includes(el.name));
     } else {
-      optionsAux = [...data];
+      optionsAux = [...data].filter((el) => el?.taxas?.length > 0);
     }
 
     if (species) {
       optionsAux = [...optionsAux].map((el) => ({
         ...el,
-        taxas: el.taxas.filter((taxa) => species.includes(taxa.name)),
+        taxas: el?.taxas.filter((taxa) => species.includes(taxa.name)),
       }));
     }
 
-    if (optionsAux?.length <= 1) {
-      optionsAux = optionsAux[0].taxas;
-    }
-
     setOptions(optionsAux);
-  }, [species, categories]);
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      updateList();
+    }
+  }, [species, categories, data, loading]);
+
+  useEffect(() => {
+    if (value) {
+      let possibleIds = [];
+      if (options[0]?.taxas) {
+        options.forEach((cat) => {
+          possibleIds = [...possibleIds, ...cat.taxas.map((taxa) => taxa.id)];
+        });
+      } else {
+        possibleIds = options.map((taxa) => taxa.id);
+      }
+      if (!possibleIds.includes(value[1])) {
+        onChange(null);
+      }
+    }
+  }, [options, value]);
 
   return (
     <>
       <Cascader
+        disabled={disabled}
         open={openCascader}
         onMouseDown={() => setOpenCascader(true)}
-        value={value}
+        value={options?.length === 1 && value ? value[1] : value}
         showSearch
         fieldNames={{
           label: "name",
@@ -52,10 +88,14 @@ function RemoteCascadeContainer(props) {
           children: "taxas",
         }}
         expandTrigger="hover"
-        options={options}
+        options={options?.length === 1 ? options[0].taxas : options}
         onChange={(e) => {
           setOpenCascader(false);
-          onChange(e);
+          if (options?.length === 1) {
+            onChange([options[0]?.id, ...e]);
+          } else {
+            onChange(e);
+          }
         }}
         dropdownRender={(menus) => {
           return (
@@ -121,19 +161,23 @@ function RemoteCascadeContainer(props) {
                         });
 
                         await props.fetchSelectorTaxas({
-                          project_id: projectId,
+                          project: projectId,
                         });
 
-                        onChange([
-                          newTaxaCategoryId,
-                          res?.value?.data?.data?.id,
-                        ]);
+                        onChange(
+                          options[0]?.taxas
+                            ? [newTaxaCategoryId, res?.value?.data?.data?.id]
+                            : [res?.value?.data?.data?.id]
+                        );
                         setOpenCascader(false);
 
                         //Open popup to insert photo
                         setPhotoUploadTaxaId(res?.value?.data?.data?.id);
+                        setCreateTaxaError(null);
+
                       } catch (err) {
                         setCreateTaxaError(err);
+                        console.log(err);
                       }
                     }}
                   />

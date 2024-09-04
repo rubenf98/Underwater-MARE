@@ -1,72 +1,101 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
-import TableContainer from "./TableContainer";
-import FormContainer from "./FormContainer";
 import { Input, Row } from "antd";
-import { fetchUsers } from "../../../../../redux/redux-modules/user/actions";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import {
+  fetchUsers,
+  setCurrentUser,
+} from "../../../../../redux/redux-modules/user/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
+import FormContainer from "./FormContainer";
+import TableContainer from "./TableContainer";
 
 const ContentContainer = styled.div`
-    width: 100%;
-    margin: auto;
+  width: 100%;
+  margin: auto;
 `;
 
 const Container = styled.div`
-    width: 100%;
-    box-sizing: border-box;
-    
+  width: 100%;
+  box-sizing: border-box;
 `;
 
+function Members({
+  data,
+  loading,
+  meta,
+  fetchUsers,
+  projectId,
+  permissions,
+  setCurrentUser,
+  currentUser,
+}) {
+  const [filters, setFilters] = useState({ project: projectId });
+  const [visible, setVisible] = useState(false);
 
+  useEffect(() => {
+    fetchUsers(1, filters);
+  }, [filters]);
 
-function Members({ data, loading, meta, fetchUsers, projectId }) {
-    const [filters, setFilters] = useState({ project: projectId });
-    const [visible, setVisible] = useState(false)
-    const [currentUser, setCurrentUser] = useState({})
+  function handlePageChange(pagination) {
+    fetchUsers(pagination.current, filters);
+  }
 
-    useEffect(() => {
-        fetchUsers(1, filters);
-    }, [filters])
+  const handleEdit = (aCurrent) => {
+    setCurrentUser(aCurrent);
+    setVisible(true);
+  };
 
-    function handlePageChange(pagination) {
-        fetchUsers(pagination.current, filters);
-    }
-
-    return (
-        <Container>
-            <TitleAddSection
-                title="Member(s)"
-                handleClick={() => setVisible(true)}
-            />
-            <ContentContainer>
-
-                <FormContainer visible={visible} setVisible={setVisible} projectId={projectId} />
-                <Row style={{ marginBottom: "20px" }}>
-                    <Input.Search onSearch={(e) => setFilters({ search: e })} size="large" type="search" placeholder="Search by name or email" />
-                </Row>
-                <TableContainer
-                    handlePageChange={handlePageChange}
-                    data={data} loading={loading} meta={meta}
-                    setVisible={setVisible} setCurrentUser={setCurrentUser}
-                />
-            </ContentContainer>
-        </Container>
-    )
+  return (
+    <Container>
+      <TitleAddSection
+        title="Member(s)"
+        hideAdd={!permissions.includes("admin")}
+        handleClick={() => setVisible(true)}
+      />
+      <ContentContainer>
+        <FormContainer
+          currentUser={currentUser}
+          visible={visible}
+          setVisible={setVisible}
+          projectId={projectId}
+        />
+        <Row style={{ marginBottom: "20px" }}>
+          <Input.Search
+            onSearch={(e) => setFilters({ ...filters, search: e })}
+            size="large"
+            type="search"
+            placeholder="Search by name or email"
+          />
+        </Row>
+        <TableContainer
+          handlePageChange={handlePageChange}
+          data={[...data]}
+          loading={loading}
+          meta={meta}
+          setVisible={setVisible}
+          setCurrentUser={handleEdit}
+        />
+      </ContentContainer>
+    </Container>
+  );
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchUsers: (page, filters) => dispatch(fetchUsers(page, filters)),
-    };
+  return {
+    fetchUsers: (page, filters) => dispatch(fetchUsers(page, filters)),
+    setCurrentUser: (record) => dispatch(setCurrentUser(record)),
+  };
 };
 
 const mapStateToProps = (state) => {
-    return {
-        loading: state.user.loading,
-        data: state.user.data,
-        meta: state.user.meta
-    };
+  return {
+    loading: state.user.loading,
+    data: state.user.data,
+    currentUser: state.user.currentUser,
+    meta: state.user.meta,
+    permissions: state.permissions.data,
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Members);

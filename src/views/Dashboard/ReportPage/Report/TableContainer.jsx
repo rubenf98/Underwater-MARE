@@ -1,9 +1,7 @@
-import React from "react";
-import { Avatar, Popconfirm, Tag } from "antd";
+import { connect } from "react-redux";
 import styled from "styled-components";
-import TableComponent from "../../Common/TableComponent";
 import RowOperation from "../../Common/RowOperation";
-import { Children } from "react";
+import TableComponent from "../../Common/TableComponent";
 
 const Container = styled.div`
   width: 100%;
@@ -20,11 +18,6 @@ const Container = styled.div`
   }
 `;
 
-const colorDecoder = {
-  admin: "gold",
-  validator: "cyan",
-};
-
 function TableContainer({
   loading,
   data,
@@ -32,6 +25,7 @@ function TableContainer({
   handlePageChange,
   setCurrent,
   handleDelete,
+  permissions,
 }) {
   const columns = [
     {
@@ -176,7 +170,10 @@ function TableContainer({
         },
       ],
     },
-    {
+  ];
+
+  if (permissions.includes("edit") || permissions.includes("delete")) {
+    columns.push({
       title: "",
       dataIndex: "Operation",
       width: 50,
@@ -189,8 +186,8 @@ function TableContainer({
           onDeleteConfirm={() => handleDelete(record.id)}
         />
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <Container>
@@ -208,4 +205,10 @@ function TableContainer({
   );
 }
 
-export default TableContainer;
+const mapStateToProps = (state) => {
+  return {
+    permissions: state.permissions.data,
+  };
+};
+
+export default connect(mapStateToProps, null)(TableContainer);

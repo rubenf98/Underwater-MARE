@@ -35,7 +35,7 @@ function Motile(props) {
     props.fetchMotiles(1, filters);
   }, [filters]);
   useEffect(() => {
-    props.fetchSelectorTaxas({ project_id: projectId });
+    props.fetchSelectorTaxas({ project: projectId });
   }, []);
 
   function handlePageChange(pagination) {
@@ -67,7 +67,7 @@ function Motile(props) {
         />
         <Row style={{ marginBottom: "20px" }}>
           <Input.Search
-            onSearch={(e) => setFilters({ search: e })}
+            onSearch={(e) => setFilters({ ...filters,search: e })}
             size="large"
             type="search"
             placeholder="Search by name or email"

@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import {
-  createBenthic,
   deleteBenthic,
   fetchBenthics,
-  updateBenthic,
 } from "../../../../../redux/redux-modules/benthic/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
 import FormContainer from "./FormContainer";
@@ -62,7 +60,7 @@ function Benthic(props) {
         />
         <Row style={{ marginBottom: "20px" }}>
           <Input.Search
-            onSearch={(e) => setFilters({ search: e })}
+            onSearch={(e) => setFilters({...filters, search: e })}
             size="large"
             type="search"
             placeholder="Search by name or email"

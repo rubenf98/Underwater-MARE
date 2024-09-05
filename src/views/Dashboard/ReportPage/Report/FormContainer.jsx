@@ -25,7 +25,7 @@ const CustomModal = styled(Modal)`
     padding: 30px 60px;
   }
 
-  .ant-modal-title{
+  .ant-modal-title {
     font-size: 1.25rem;
   }
 `;
@@ -33,12 +33,12 @@ const CustomModal = styled(Modal)`
 function FormContainer(props) {
   const [form] = Form.useForm();
   const [sample, setSample] = useState([
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
+    undefined, //locality code
+    undefined, //site code
+    undefined, //site area
+    undefined, //"Time" + time
+    undefined, //"D" + depth.id
+    undefined, //"R" + replica
   ]);
 
   const [latitude, setLatitude] = useState(32.606889622);
@@ -122,6 +122,15 @@ function FormContainer(props) {
 
         ...initFunctions,
       });
+
+      setSample([
+        current.site.locality.code,
+        current.site.code,
+        current.site_area,
+        "Time" + current.time, //"Time" + time
+        "D" + current.depth.id, //"D" + depth.id
+        "D" + current.replica, //"R" + replica
+      ]);
 
       handlePositionChange({
         lngLat: { lat: current.latitude, lng: current.longitude },

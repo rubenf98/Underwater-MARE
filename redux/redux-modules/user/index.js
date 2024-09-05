@@ -3,7 +3,6 @@ import { types } from "./types";
 const initialState = {
   data: [],
   meta: {},
-  currentUser: {},
   loading: false,
 };
 
@@ -39,11 +38,6 @@ export default (state = initialState, action = {}) => {
             ? action.payload.data.data
             : record
         ),
-      };
-    case types.SET_CURRENT_USER:
-      return {
-        ...state,
-        currentUser: action.payload,
       };
     default:
       return state;

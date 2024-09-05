@@ -24,13 +24,14 @@ function FormContainer({
   projectId,
   currentUser,
   updateMember,
+  users,
 }) {
   const [form] = Form.useForm();
 
   const create = () => {
     form.validateFields().then((values) => {
-      if (currentUser.id) {
-        updateMember(projectId, currentUser.id, values).then(() => {
+      if (currentUser) {
+        updateMember(projectId, currentUser, values).then(() => {
           handleCancel();
         });
       } else {
@@ -47,18 +48,15 @@ function FormContainer({
   };
 
   useEffect(() => {
-    if (currentUser?.id) {
+    if (currentUser) {
+      const user = users.find((el) => el.id === currentUser);
+
       form.setFieldsValue({
-        email: currentUser.email,
-        show:
-          currentUser?.permissions?.filter((el) => el.name === "show")?.length >
-          0,
+        email: user.email,
+        show: user?.permissions?.filter((el) => el.name === "show")?.length > 0,
         create:
-          currentUser?.permissions?.filter((el) => el.name === "create")
-            ?.length > 0,
-        edit:
-          currentUser?.permissions?.filter((el) => el.name === "edit")?.length >
-          0,
+          user?.permissions?.filter((el) => el.name === "create")?.length > 0,
+        edit: user?.permissions?.filter((el) => el.name === "edit")?.length > 0,
       });
     }
   }, [visible]);
@@ -118,6 +116,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     loading: state.project.loading,
+    users: state.user.data,
   };
 };
 

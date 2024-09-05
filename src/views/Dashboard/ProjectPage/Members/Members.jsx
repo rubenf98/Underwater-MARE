@@ -2,10 +2,7 @@ import { Input, Row } from "antd";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import {
-  fetchUsers,
-  setCurrentUser,
-} from "../../../../../redux/redux-modules/user/actions";
+import { fetchUsers } from "../../../../../redux/redux-modules/user/actions";
 import TitleAddSection from "../../Common/TitleAddSection";
 import FormContainer from "./FormContainer";
 import TableContainer from "./TableContainer";
@@ -20,18 +17,10 @@ const Container = styled.div`
   box-sizing: border-box;
 `;
 
-function Members({
-  data,
-  loading,
-  meta,
-  fetchUsers,
-  projectId,
-  permissions,
-  setCurrentUser,
-  currentUser,
-}) {
+function Members({ data, loading, meta, fetchUsers, projectId, permissions }) {
   const [filters, setFilters] = useState({ project: projectId });
   const [visible, setVisible] = useState(false);
+  const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
     fetchUsers(1, filters);
@@ -84,7 +73,6 @@ function Members({
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsers: (page, filters) => dispatch(fetchUsers(page, filters)),
-    setCurrentUser: (record) => dispatch(setCurrentUser(record)),
   };
 };
 
@@ -92,7 +80,6 @@ const mapStateToProps = (state) => {
   return {
     loading: state.user.loading,
     data: state.user.data,
-    currentUser: state.user.currentUser,
     meta: state.user.meta,
     permissions: state.permissions.data,
   };

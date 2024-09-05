@@ -66,7 +66,7 @@ function TableContainer({
           return (
             <RowOperation
               onUpdateClick={() => {
-                setCurrentUser(record);
+                setCurrentUser(record.id);
               }}
             />
           );

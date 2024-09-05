@@ -18,8 +18,3 @@ export const updateMember = (id, userId, data) => ({
     data
   ),
 });
-
-export const setCurrentUser = (record) => ({
-  type: types.SET_CURRENT_USER,
-  payload: record,
-});

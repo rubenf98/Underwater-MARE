@@ -25,7 +25,7 @@ const CustomModal = styled(Modal)`
 `;
 
 function FormContainer(props) {
-  const { current, visible, projectId, create, update, loading, taxas } = props;
+  const { current, visible, projectId, create, update, loading, taxas, } = props;
   const [form] = Form.useForm();
 
   const handleOk = () => {
@@ -237,6 +237,7 @@ function FormContainer(props) {
                           name={[name, "taxa_id"]}
                         >
                           <RemoteCascadeContainer
+                            loadTaxas={false}
                             categories={["macroinv", "algae", "other"]}
                             projectId={projectId}
                           />

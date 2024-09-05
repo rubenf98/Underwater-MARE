@@ -23,13 +23,16 @@ function RemoteCascadeContainer(props) {
     species,
     loading,
     disabled,
+    loadTaxas = true,
   } = props;
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    props.fetchSelectorTaxas({
-      project: projectId,
-    });
+    if (loadTaxas) {
+      props.fetchSelectorTaxas({
+        project: projectId,
+      });
+    }
   }, []);
 
   const updateList = () => {
@@ -174,7 +177,6 @@ function RemoteCascadeContainer(props) {
                         //Open popup to insert photo
                         setPhotoUploadTaxaId(res?.value?.data?.data?.id);
                         setCreateTaxaError(null);
-
                       } catch (err) {
                         setCreateTaxaError(err);
                         console.log(err);

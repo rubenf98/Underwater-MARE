@@ -86,8 +86,8 @@ function Dashboard(props) {
         <p>{user.email}</p>
         <br />
         <h3>Notification(s)</h3>
-        {invites.length > 0
-          ? invites.map((invite) => (
+        {invites?.length > 0
+          ? invites?.map((invite) => (
               <Notification key={invite.id}>
                 <p>
                   You have been invited to the project {invite.project.name}

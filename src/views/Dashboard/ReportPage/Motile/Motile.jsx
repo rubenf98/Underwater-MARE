@@ -29,7 +29,7 @@ function Motile(props) {
 
   const [filters, setFilters] = useState({ project: projectId });
   const [visible, setVisible] = useState(false);
-  const [current, setCurrent] = useState({});
+  const [current, setCurrent] = useState();
 
   useEffect(() => {
     props.fetchMotiles(1, filters);
@@ -43,7 +43,7 @@ function Motile(props) {
   }
 
   const handleCancel = () => {
-    setCurrent({});
+    setCurrent();
     setVisible(false);
   };
 

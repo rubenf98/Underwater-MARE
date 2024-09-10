@@ -1,6 +1,6 @@
 import axiosConfig from "../../../src/axiosConfig";
 
-const createUser = (data) => axiosConfig.post(`/register`, data);
+const createUser = (data) => axiosConfig.post(`${import.meta.env.VITE_API}/api/register`, data);
 
 const login = (data) => axiosConfig.post(`${import.meta.env.VITE_API}/api/login`, data);
 

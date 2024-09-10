@@ -25,19 +25,35 @@ const CustomModal = styled(Modal)`
 `;
 
 function FormContainer(props) {
-  const { current, visible, projectId, create, update, loading, taxas, } = props;
+  const {
+    current,
+    visible,
+    projectId,
+    create,
+    update,
+    loading,
+    taxas,
+    benthics,
+  } = props;
   const [form] = Form.useForm();
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      if (current.report_id) {
-        update(current.id, { ...values, project_id: projectId }).then(() => {
+      if (current) {
+        update(current, { ...values, project_id: projectId }).then(() => {
           handleCancel();
         });
       } else {
-        create({ ...values, project_id: projectId }).then(() => {
-          handleCancel();
-        });
+        create({ ...values, project_id: projectId })
+          .then(() => {
+            handleCancel();
+          })
+          .catch((err) => {
+            message.error({
+              content: err?.response?.data?.message,
+              key: "benthics-already-exist",
+            });
+          });
       }
     });
   };
@@ -109,13 +125,17 @@ function FormContainer(props) {
   };
 
   useEffect(() => {
-    if (visible) {
-      props.fetchSelectorSubstrates({ project_id: projectId });
-      props.fetchSelectorTaxas({ project: projectId });
+    props.fetchSelectorSubstrates({ project_id: projectId });
+    props.fetchSelectorTaxas({ project: projectId });
+  }, []);
 
-      if (current.report_id) {
+  useEffect(() => {
+    if (visible) {
+      if (current) {
+        const benthic = benthics.find((el) => el.id === current);
+
         var newBenthics = [];
-        current.children.map((benthic) => {
+        benthic.children.map((benthic) => {
           newBenthics.push({
             ...benthic,
             taxa_id: benthic?.taxa?.id
@@ -126,7 +146,7 @@ function FormContainer(props) {
 
         form.setFieldsValue({
           benthics: newBenthics,
-          report_id: current.report_id,
+          report_id: benthic.report_id,
         });
       } else {
         // Init p## field for 100 transects
@@ -135,9 +155,9 @@ function FormContainer(props) {
         form.setFieldValue("benthics", a);
       }
     }
-  }, [visible]);
+  }, [visible, current]);
 
-  const benthics = Form.useWatch("benthics", form);
+  const benthicsWatch = Form.useWatch("benthics", form);
 
   //THIS IS A FEATURE THAT LOADS THE 100 POINTS OF BENTHICS ON BOTTOM SCROLL REACH
   // const handleScroll = (e) => {
@@ -180,7 +200,7 @@ function FormContainer(props) {
       footer={[
         <Button
           key="fill"
-          disabled={benthics ? !benthics[0].substrate_id : true}
+          disabled={benthicsWatch ? !benthicsWatch[0].substrate_id : true}
           onClick={handleFill}
         >
           Fill
@@ -279,6 +299,7 @@ const mapStateToProps = (state) => {
   return {
     loading: state.benthic.loading,
     taxas: state.taxa.selector,
+    benthics: state.benthic.data,
   };
 };
 

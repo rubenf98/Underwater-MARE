@@ -29,9 +29,9 @@ function TableContainer({
     {
       title: "Sample",
       dataIndex: "code",
-      key: "report_id",
+      key: ["id", "report_id"],
       render: (code, row) =>
-        code ? code + (row?.report_id ? " (#" + row.report_id + ")" : "") : "",
+        code ? code + (row?.report_id ? " (#" + row?.report_id + ")" : "") : "",
     },
     {
       title: "P##",
@@ -60,8 +60,8 @@ function TableContainer({
           <RowOperation
             deleteRow
             updateRow
-            onUpdateClick={() => setCurrent(record)}
-            onDeleteConfirm={() => handleDelete(record.report_id)}
+            onUpdateClick={() => setCurrent(record.id)}
+            onDeleteConfirm={() => handleDelete(record.id)}
           />
         ),
     },
@@ -74,7 +74,7 @@ function TableContainer({
         data={data}
         columns={columns}
         meta={meta}
-        rowKey="report_id"
+        rowKey={["id", "report_id"]}
         handlePageChange={(aPage) => handlePageChange(aPage)}
       />
     </Container>

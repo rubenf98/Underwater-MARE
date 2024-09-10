@@ -22,12 +22,12 @@ const Container = styled.div`
   }
 `;
 function TitleAddSection(props) {
-  const { permissions = [], hideAdd, title, handleClick } = props;
+  const { permissions = [], hideAdd, title, handleClick, forceShow } = props;
 
   return (
     <Container>
       <h2>{title}</h2>
-      {!hideAdd && permissions.includes("create") && (
+      {(forceShow || (!hideAdd && permissions.includes("create"))) && (
         <button onClick={handleClick}>
           <img
             src="/assets/icons/add.svg"

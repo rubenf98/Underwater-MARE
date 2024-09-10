@@ -23,9 +23,9 @@ const Container = styled.div`
 function Benthic(props) {
   const { data, loading, meta, projectId } = props;
 
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({ project: projectId });
   const [visible, setVisible] = useState(false);
-  const [current, setCurrent] = useState({});
+  const [current, setCurrent] = useState();
 
   useEffect(() => {
     props.fetchBenthics(1, filters);
@@ -36,7 +36,7 @@ function Benthic(props) {
   }
 
   const handleCancel = () => {
-    setCurrent({});
+    setCurrent();
     setVisible(false);
   };
 

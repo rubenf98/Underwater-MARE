@@ -30,19 +30,24 @@ const CustomModal = styled(Modal)`
 
 function FormContainer(props) {
   const [form] = Form.useForm();
-  const { current, visible, projectId } = props;
+  const { current, visible, projectId, motiles } = props;
   const type = Form.useWatch("type", form);
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      if (current.id) {
+      if (current) {
         props
-          .update(current.id, {
+          .update(current, {
             project_id: projectId,
             report_id: values.report_id,
             type: values.type,
             motiles: values.motiles.map((el) => {
               el.taxa_id = el.taxa_id[1];
+
+              if (type !== "fish") {
+                el.size = null;
+                el.size_category_id = null;
+              }
               return el;
             }),
           })
@@ -58,6 +63,11 @@ function FormContainer(props) {
             motiles: values.motiles.map((el) => {
               el.taxa_id =
                 el.taxa_id?.length > 1 ? el.taxa_id[1] : el.taxa_id[0];
+
+              if (type !== "fish") {
+                el.size = null;
+                el.size_category_id = null;
+              }
               return el;
             }),
           })
@@ -70,14 +80,15 @@ function FormContainer(props) {
 
   const handleCancel = () => {
     props.handleCancel();
-    form.resetFields("motiles");
+    form.resetFields();
   };
 
   useEffect(() => {
-    if (current.report_id) {
-      let motiles = [];
-      current.children.map((motile) => {
-        motiles.push({
+    if (current) {
+      const currentMotile = motiles.find((el) => el.id === current);
+      let newMotiles = [];
+      currentMotile.children.map((motile) => {
+        newMotiles.push({
           ntotal: motile.ntotal,
           size: motile.size,
           notes: motile.notes,
@@ -87,9 +98,9 @@ function FormContainer(props) {
       });
 
       form.setFieldsValue({
-        report_id: current.report_id,
-        type: current.type,
-        motiles: motiles,
+        report_id: currentMotile.report_id,
+        type: currentMotile.type,
+        motiles: newMotiles,
       });
     }
   }, [visible]);
@@ -259,6 +270,7 @@ function FormContainer(props) {
 const mapStateToProps = (state) => {
   return {
     loading: state.motile.loading,
+    motiles: state.motile.data,
   };
 };
 

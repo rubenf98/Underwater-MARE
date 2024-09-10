@@ -56,7 +56,7 @@ function TableComponent({
   loading,
   showQuickJumper = false,
   rowKey = "id",
-  handleExpandable,
+  handleExpandable = { childrenColumnName: "children" },
   bordered = false,
   title,
   handleShowSizeChange,
@@ -70,6 +70,7 @@ function TableComponent({
   return (
     <Container>
       <Table
+        chi
         // scroll={{ x: "100%" }}
         rowClassName={(row, i) => {
           let className = "";

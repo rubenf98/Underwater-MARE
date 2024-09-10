@@ -62,8 +62,8 @@ function RemoteCascadeContainer(props) {
   }, [species, categories, data, loading]);
 
   useEffect(() => {
-    if (value) {
-      let possibleIds = [];
+    if (value && options?.length > 0) {
+      let possibleIds = []; 
       if (options[0]?.taxas) {
         options.forEach((cat) => {
           possibleIds = [...possibleIds, ...cat.taxas.map((taxa) => taxa.id)];

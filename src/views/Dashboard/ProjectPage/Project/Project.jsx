@@ -113,6 +113,7 @@ function Project(props) {
         />
 
         <TitleAddSection
+          forceShow
           title="Project(s)"
           handleClick={() => setVisible(true)}
         />

@@ -49,12 +49,18 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         loading: false,
-        data: state.data.map((record) =>
-          record.report_id === action.payload.data.data.report_id &&
-          record.type === action.payload.data.data.type
-            ? action.payload.data.data
-            : record
-        ),
+        data: state.data.find(
+          (record) =>
+            record.report_id === action.payload.data.data.report_id &&
+            record.type === action.payload.data.data.type
+        )
+          ? state.data.map((record) =>
+              record.report_id === action.payload.data.data.report_id &&
+              record.type === action.payload.data.data.type
+                ? action.payload.data.data
+                : record
+            )
+          : [...state.data, action.payload.data.data],
       };
 
     case `${types.DELETE_MOTILE}_FULFILLED`:

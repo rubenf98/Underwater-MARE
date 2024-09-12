@@ -1,4 +1,7 @@
-# Development
+# Underwater Survey
+Começado pelo Rúben no Wave - branch MARE
+
+## Development
 
 Recommended to use docker for development. The following commands allow for the development of the application without the need to install any dependencies.
 
@@ -12,7 +15,7 @@ In case docker is not used, the following are needed:
 Node v20.11.0
 Npm v10.2.4
 
-Then: 
+Then:
 
 
 ```sh

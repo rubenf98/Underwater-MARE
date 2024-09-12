@@ -1,9 +1,6 @@
 import { types } from "./types";
 import api from "../api/auth";
 import axiosConfig from "../../../src/axiosConfig";
-import { jwtDecode } from "jwt-decode";
-
-const url = `${import.meta.env.VITE_API}/api`;
 
 export const createUser = (data) => ({
   type: types.CREATE_USER,
@@ -12,12 +9,11 @@ export const createUser = (data) => ({
 
 export const login = (data) => {
   return (dispatch) => {
-    return axiosConfig.post(`${import.meta.env.VITE_API}/api/login`, data).then((res) => {
-      const token = res.data.data.access_token;
-      localStorage.setItem("token", token);
-      setAuthorizationToken(token);
-      dispatch(loginSuccess(jwtDecode(token), res.data.user));
-    });
+    return axiosConfig
+      .post(`${import.meta.env.VITE_API}/api/login`, data)
+      .then((res) => {
+        dispatch(loginSuccess(res.data.user));
+      });
   };
 };
 
@@ -26,10 +22,9 @@ export const me = () => ({
   payload: axiosConfig.get(`/me`),
 });
 
-export function loginSuccess(token, user) {
+export function loginSuccess(user) {
   return {
     type: types.LOGIN_SUCCESS,
-    payload: token,
     user: user,
   };
 }
@@ -41,39 +36,10 @@ export const logout = () => {
       payload: axiosConfig.get(`${import.meta.env.VITE_API}/api/logout`),
     });
     response.then((res) => {
-      resetToken();
+      window.localStorage.removeItem("persist:root");
     });
   };
 };
-
-export function refreshAuthorizationToken(token) {
-  return (dispatch) => {
-    return axiosConfig
-      .get({
-        url: `${url}/refresh`,
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const token = res.data.data.access_token;
-        localStorage.setItem("token", token);
-        setAuthorizationToken(token);
-        dispatch(loginSuccess(jwtDecode(token)));
-      })
-      .catch((err) => {
-        resetToken();
-      });
-  };
-}
-export function setAuthorizationToken(token) {
-  token
-    ? (axiosConfig.defaults.headers.common["Authorization"] = `Bearer ${token}`)
-    : delete axiosConfig.defaults.headers.common["Authorization"];
-}
-
-export function resetToken() {
-  localStorage.removeItem("token");
-  setAuthorizationToken(false);
-}
 
 export const updateProfilePicture = (id, data) => ({
   type: types.UPDATE_PROFILE_PICTURE,

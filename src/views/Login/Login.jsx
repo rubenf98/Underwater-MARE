@@ -17,7 +17,8 @@ function Login(props) {
                 navigate("/dashboard");
             })
             .catch((error) => {
-                message.error(error.response.data.message, 5);
+                console.log(error)
+                message.error(error?.response?.data?.message, 5);
             });
     };
 
